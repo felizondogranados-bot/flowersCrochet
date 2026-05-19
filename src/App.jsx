@@ -7,6 +7,7 @@ import ScrollToTop from "./components/ScrollToTop"
 import Carrito from "./pages/Carrito"
 
 import {
+  BrowserRouter,
   Routes,
   Route,
 } from "react-router-dom"
@@ -15,7 +16,7 @@ function App() {
 
   return (
 
-    <>
+    <BrowserRouter>
       <ScrollToTop />
 
       <div className="bg-pink-50 min-h-screen">
@@ -33,12 +34,10 @@ function App() {
             path="/catalogo"
             element={<Catalogo />}
           />
-
           <Route
             path="/favoritos"
             element={<Favoritos />}
           />
-
           <Route
             path="/carrito"
             element={<Carrito />}
@@ -47,7 +46,8 @@ function App() {
         </Routes>
 
       </div>
-    </>
+
+    </BrowserRouter>
   )
 }
 
