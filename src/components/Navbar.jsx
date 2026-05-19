@@ -22,7 +22,13 @@ function Navbar() {
                     to="/"
                     className="text-3xl font-bold text-pink-400"
                 >
-                    Flowers Crochet 🌸
+                    <img
+
+                        src="/flowersCrochet/logo.png"
+                        alt="Flowers Crochet"
+                        className="h-10 object-contain"
+                    />
+
                 </Link>
 
                 {/* Menú Desktop */}

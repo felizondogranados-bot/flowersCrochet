@@ -1,5 +1,19 @@
 @import "tailwindcss";
+:root {
 
+  --pink-main: #fff5f8;
+
+  --pink-navbar: rgba(255, 245, 248, 0.90);
+
+  --pink-border: #f9c5d5;
+
+  --pink-button: #ec4899;
+
+  --pink-button-hover: #db2777;
+
+  --pink-text: #1e293b;
+
+}
 html {
   scroll-behavior: smooth;
 }
