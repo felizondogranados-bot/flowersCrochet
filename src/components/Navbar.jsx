@@ -43,7 +43,7 @@ function Navbar() {
 
                     <li>
                         <a
-                            href="/#pedidos"
+                            href="#pedidos"
                             className="hover:text-pink-400 transition"
                         >
                             Pedidos
@@ -52,7 +52,7 @@ function Navbar() {
 
                     <li>
                         <a
-                            href="/#contacto"
+                            href="#contacto"
                             className="hover:text-pink-400 transition"
                         >
                             Contacto
@@ -121,7 +121,7 @@ function Navbar() {
 
                         <li>
                             <a
-                                href="/#pedidos"
+                                href="#pedidos"
                                 onClick={() => setMenuAbierto(false)}
                                 className="hover:text-pink-400 transition"
                             >
@@ -131,7 +131,7 @@ function Navbar() {
 
                         <li>
                             <a
-                                href="/#contacto"
+                                href="#contacto"
                                 onClick={() => setMenuAbierto(false)}
                                 className="hover:text-pink-400 transition"
                             >
