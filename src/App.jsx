@@ -17,6 +17,7 @@ function App() {
   return (
 
     <BrowserRouter>
+
       <ScrollToTop />
 
       <div className="bg-pink-50 min-h-screen">
@@ -34,10 +35,12 @@ function App() {
             path="/catalogo"
             element={<Catalogo />}
           />
+
           <Route
             path="/favoritos"
             element={<Favoritos />}
           />
+
           <Route
             path="/carrito"
             element={<Carrito />}
