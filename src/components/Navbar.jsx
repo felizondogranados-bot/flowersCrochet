@@ -1,10 +1,15 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { HiMenu, HiX } from "react-icons/hi"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+
+import { CartContext } from "../context/CartContext"
 
 function Navbar() {
 
     const [menuAbierto, setMenuAbierto] = useState(false)
+
+    const { cart } = useContext(CartContext)
+    const navigate = useNavigate()
 
     return (
 
@@ -42,21 +47,57 @@ function Navbar() {
                     </li>
 
                     <li>
-                        <a
-                            href="#pedidos"
+                        <button
+
+                            onClick={() => {
+
+                                navigate("/")
+
+                                setTimeout(() => {
+
+                                    document
+                                        .getElementById("pedidos")
+                                        ?.scrollIntoView({
+                                            behavior: "smooth"
+                                        })
+
+                                }, 100)
+
+                            }}
+
                             className="hover:text-pink-400 transition"
                         >
+
                             Pedidos
-                        </a>
+
+                        </button>
                     </li>
 
                     <li>
-                        <a
-                            href="#contacto"
+                        <button
+
+                            onClick={() => {
+
+                                navigate("/")
+
+                                setTimeout(() => {
+
+                                    document
+                                        .getElementById("contacto")
+                                        ?.scrollIntoView({
+                                            behavior: "smooth"
+                                        })
+
+                                }, 100)
+
+                            }}
+
                             className="hover:text-pink-400 transition"
                         >
+
                             Contacto
-                        </a>
+
+                        </button>
                     </li>
 
                 </ul>
@@ -67,9 +108,21 @@ function Navbar() {
                     {/* Carrito */}
                     <Link
                         to="/carrito"
-                        className="hover:scale-110 transition"
+                        className="relative hover:scale-110 transition"
                     >
+
                         🛒
+
+                        {cart.length > 0 && (
+
+                            <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+
+                                {cart.length}
+
+                            </span>
+
+                        )}
+
                     </Link>
 
                     {/* Favoritos */}
@@ -147,9 +200,21 @@ function Navbar() {
                         <Link
                             to="/carrito"
                             onClick={() => setMenuAbierto(false)}
-                            className="hover:scale-110 transition"
+                            className="relative hover:scale-110 transition"
                         >
+
                             🛒
+
+                            {cart.length > 0 && (
+
+                                <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+
+                                    {cart.length}
+
+                                </span>
+
+                            )}
+
                         </Link>
 
                         <Link

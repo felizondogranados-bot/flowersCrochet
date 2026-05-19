@@ -1,4 +1,7 @@
+import { Link } from "react-router-dom"
+
 function Hero() {
+
   return (
 
     <section
@@ -24,18 +27,22 @@ function Hero() {
             personalizados hechos con mucho amor 💖
           </p>
 
+          {/* Botones */}
           <div className="flex flex-col sm:flex-row gap-4 mt-10">
 
-            <a
-              href="#catalogo"
+            {/* Catálogo */}
+            <Link
+              to="/catalogo"
               className="bg-pink-400 hover:bg-pink-500 text-white px-8 py-4 rounded-full text-lg transition text-center shadow-md"
             >
-              Ver catálogo
-            </a>
+              Ver catálogo 🌸
+            </Link>
 
+            {/* WhatsApp */}
             <a
               href="https://wa.me/50688115650"
               target="_blank"
+              rel="noopener noreferrer"
               className="bg-white hover:bg-pink-50 text-pink-500 border border-pink-300 px-8 py-4 rounded-full text-lg transition text-center shadow-md"
             >
               WhatsApp 📲
