@@ -5,6 +5,7 @@ import Catalogo from "./pages/Catalogo"
 import Favoritos from "./pages/Favoritos"
 import ScrollToTop from "./components/ScrollToTop"
 import Carrito from "./pages/Carrito"
+import ProductDetail from "./pages/ProductDetail"
 
 import {
   BrowserRouter,
@@ -44,6 +45,10 @@ function App() {
           <Route
             path="/carrito"
             element={<Carrito />}
+          />
+          <Route
+            path="/producto/:id"
+            element={<ProductDetail />}
           />
 
         </Routes>
