@@ -12,9 +12,7 @@ function Navbar() {
     const navigate = useNavigate()
 
     return (
-
-        <nav className="sticky top-0 z-50 backdrop-blur-md bg-white/70 border-b border-pink-100">
-
+        <nav className="sticky top-0 z-50 bg-[#FBE3E3] border-b border-pink-200">
             <div className="px-8 py-4 flex items-center justify-between">
 
                 {/* Logo */}
