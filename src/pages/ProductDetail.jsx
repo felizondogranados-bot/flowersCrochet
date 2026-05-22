@@ -19,6 +19,9 @@ function ProductDetail() {
     const [colorSeleccionado, setColorSeleccionado] =
         useState("")
 
+    const [otroColor, setOtroColor] =
+        useState("")
+
     const [descripcion, setDescripcion] =
         useState("")
 
@@ -103,9 +106,12 @@ function ProductDetail() {
 
                                             key={color}
 
-                                            onClick={() =>
+                                            onClick={() => {
+
                                                 setColorSeleccionado(color)
-                                            }
+                                                setOtroColor("")
+
+                                            }}
 
                                             className={`w-14 h-14 rounded-full border-4 transition hover:scale-110
 
@@ -124,7 +130,45 @@ function ProductDetail() {
 
                                     ))}
 
+                                    {/* Otro color */}
+                                    <button
+
+                                        onClick={() =>
+                                            setColorSeleccionado("Otro")
+                                        }
+
+                                        className={`px-5 py-3 rounded-full border transition
+
+                                        ${colorSeleccionado === "Otro"
+                                                ? "bg-pink-400 text-white border-pink-400"
+                                                : "bg-white border-pink-200"
+                                            }`}
+                                    >
+
+                                        Otro 🌸
+
+                                    </button>
+
                                 </div>
+
+                                {/* Input otro color */}
+                                {
+
+                                    colorSeleccionado === "Otro" && (
+
+                                        <input
+                                            type="text"
+                                            placeholder="Escriba el color deseado..."
+                                            value={otroColor}
+                                            onChange={(e) =>
+                                                setOtroColor(e.target.value)
+                                            }
+                                            className="mt-5 w-full border border-pink-200 rounded-2xl p-4 outline-none bg-white"
+                                        />
+
+                                    )
+
+                                }
 
                             </div>
 
@@ -232,13 +276,19 @@ function ProductDetail() {
 
                         onClick={() => {
 
+                            const colorFinal =
+
+                                colorSeleccionado === "Otro"
+                                    ? otroColor
+                                    : colorSeleccionado
+
                             addToCart({
 
                                 ...producto,
 
                                 cantidad,
 
-                                colorSeleccionado,
+                                colorSeleccionado: colorFinal,
 
                                 descripcionPersonalizada:
                                     descripcion,
@@ -247,7 +297,18 @@ function ProductDetail() {
 
                         }}
 
-                        className="mt-12 bg-pink-500 hover:bg-pink-600 text-white px-10 py-5 rounded-full text-lg shadow-lg transition"
+                        disabled={
+                            !colorSeleccionado ||
+                            (colorSeleccionado === "Otro" && !otroColor)
+                        }
+
+                        className={`mt-12 px-10 py-5 rounded-full text-lg shadow-lg transition text-white
+
+                        ${!colorSeleccionado ||
+                                (colorSeleccionado === "Otro" && !otroColor)
+                                ? "bg-gray-300 cursor-not-allowed"
+                                : "bg-pink-500 hover:bg-pink-600"
+                            }`}
                     >
 
                         Agregar al carrito 🛒

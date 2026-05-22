@@ -48,19 +48,25 @@ function Hero() {
 
                     <div className="flex flex-col sm:flex-row gap-4 mt-10">
 
-                        <a
-                            href="#catalogo"
+                        {/* Botón catálogo */}
+                        <Link
+                            to="/catalogo"
                             className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-full text-lg transition text-center shadow-lg"
                         >
-                            Ver catálogo 🌸
-                        </a>
 
+                            Ver catálogo 🌸
+
+                        </Link>
+
+                        {/* WhatsApp */}
                         <a
                             href="https://wa.me/50688115650"
                             target="_blank"
                             className="bg-white hover:bg-pink-50 text-pink-500 border border-pink-300 px-8 py-4 rounded-full text-lg transition text-center shadow-lg"
                         >
+
                             WhatsApp 📲
+
                         </a>
 
                     </div>

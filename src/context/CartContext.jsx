@@ -1,68 +1,94 @@
-import { createContext, useState, useEffect } from "react"
+import { createContext, useState } from "react"
 
-export const CartContext = createContext()
+export const CartContext =
+    createContext()
 
 function CartProvider({ children }) {
 
-  const [cart, setCart] = useState(() => {
+    const [cart, setCart] =
+        useState([])
 
-    const carritoGuardado = localStorage.getItem("cart")
+    const addToCart = (producto) => {
 
-    return carritoGuardado
-      ? JSON.parse(carritoGuardado)
-      : []
+        const productoExistente =
+            cart.find(
 
-  })
+                (item) =>
 
-  useEffect(() => {
+                    item.id === producto.id &&
+                    item.colorSeleccionado === producto.colorSeleccionado &&
+                    item.descripcionPersonalizada === producto.descripcionPersonalizada
 
-    localStorage.setItem(
-      "cart",
-      JSON.stringify(cart)
-    )
+            )
 
-  }, [cart])
+        if (productoExistente) {
 
-  const addToCart = (producto) => {
+            setCart(
 
-    const productoExistente = cart.find(
-      (item) => item.id === producto.id
-    )
+                cart.map((item) =>
 
-    if (productoExistente) {
+                    item.id === producto.id &&
+                    item.colorSeleccionado === producto.colorSeleccionado &&
+                    item.descripcionPersonalizada === producto.descripcionPersonalizada
 
-      setCart(
-        cart.map((item) =>
-          item.id === producto.id
-            ? { ...item, cantidad: item.cantidad + 1 }
-            : item
-        )
-      )
+                        ? {
 
-    } else {
+                            ...item,
 
-      setCart([
-        ...cart,
-        { ...producto, cantidad: 1 }
-      ])
+                            cantidad:
+                                item.cantidad + producto.cantidad
+
+                        }
+
+                        : item
+
+                )
+
+            )
+
+        } else {
+
+            setCart([
+
+                ...cart,
+
+                producto
+
+            ])
+
+        }
+
     }
-  }
 
-  const removeFromCart = (id) => {
-    setCart(cart.filter((item) => item.id !== id))
-  }
+    const removeFromCart = (id) => {
 
-  return (
-    <CartContext.Provider
-      value={{
-        cart,
-        addToCart,
-        removeFromCart,
-      }}
-    >
-      {children}
-    </CartContext.Provider>
-  )
+        setCart(
+
+            cart.filter(
+
+                (item) => item.id !== id
+
+            )
+
+        )
+
+    }
+
+    return (
+
+        <CartContext.Provider
+            value={{
+                cart,
+                addToCart,
+                removeFromCart,
+            }}
+        >
+
+            {children}
+
+        </CartContext.Provider>
+
+    )
 }
 
 export default CartProvider

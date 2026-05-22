@@ -1,8 +1,7 @@
-import { useContext, useState } from "react"
+import { useContext } from "react"
 import { Link } from "react-router-dom"
 
 import { FavoritesContext } from "../context/FavoritesContext"
-import { CartContext } from "../context/CartContext"
 
 import { motion } from "framer-motion"
 
@@ -10,11 +9,6 @@ function ProductCard({ producto }) {
 
     const { favorites, toggleFavorite } =
         useContext(FavoritesContext)
-
-    const { addToCart } =
-        useContext(CartContext)
-
-    const [mensaje, setMensaje] = useState(false)
 
     const esFavorito = favorites.find(
         (item) => item.id === producto.id
@@ -71,12 +65,16 @@ function ProductCard({ producto }) {
 
                 {/* Categoría */}
                 <p className="text-sm text-gray-400 mt-1">
+
                     {producto.categoria}
+
                 </p>
 
                 {/* Precio */}
                 <p className="text-pink-500 font-bold mt-3 text-2xl">
+
                     ₡{producto.precio}
+
                 </p>
 
                 {/* Descripción */}
@@ -86,59 +84,19 @@ function ProductCard({ producto }) {
 
                 </p>
 
-                {/* Botones */}
-                <div className="flex flex-col gap-3 mt-5">
+                {/* Botón */}
+                <div className="mt-6">
 
-                    {/* Ver producto */}
                     <Link
                         to={`/producto/${producto.id}`}
-                        className="w-full bg-pink-100 hover:bg-pink-200 text-pink-600 py-3 rounded-full text-center font-medium transition"
+                        className="w-full bg-pink-100 hover:bg-pink-200 text-pink-600 py-3 rounded-full text-center font-medium transition block"
                     >
 
                         Ver producto 🌸
 
                     </Link>
 
-                    {/* Carrito */}
-                    <button
-
-                        onClick={() => {
-
-                            addToCart(producto)
-
-                            setMensaje(true)
-
-                            setTimeout(() => {
-
-                                setMensaje(false)
-
-                            }, 2000)
-
-                        }}
-
-                        className="w-full bg-pink-400 hover:bg-pink-500 text-white py-3 rounded-full transition font-medium shadow-md"
-                    >
-
-                        Agregar al carrito 🛒
-
-                    </button>
-
                 </div>
-
-                {/* Mensaje */}
-                {
-
-                    mensaje && (
-
-                        <p className="text-green-500 text-sm mt-4 font-medium text-center">
-
-                            ✅ Producto añadido al carrito
-
-                        </p>
-
-                    )
-
-                }
 
             </div>
 

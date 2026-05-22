@@ -6,6 +6,7 @@ import Favoritos from "./pages/Favoritos"
 import ScrollToTop from "./components/ScrollToTop"
 import Carrito from "./pages/Carrito"
 import ProductDetail from "./pages/ProductDetail"
+import Admin from "./pages/Admin"
 
 import {
   BrowserRouter,
@@ -17,7 +18,7 @@ function App() {
 
   return (
 
-    <BrowserRouter>
+    <BrowserRouter basename="/flowersCrochet">
 
       <ScrollToTop />
 
@@ -36,6 +37,9 @@ function App() {
             path="/catalogo"
             element={<Catalogo />}
           />
+          <Route 
+          path="/admin" 
+          element={<Admin />} />
 
           <Route
             path="/favoritos"
