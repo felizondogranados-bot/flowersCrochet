@@ -14,8 +14,13 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
     "firebase": "^12.13.0",
     "framer-motion": "^12.39.0",
+    "mssql": "^12.5.4",
+    "multer": "^2.1.1",
+    "nodemon": "^3.1.14",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-icons": "^5.6.0",
@@ -34,5 +39,17 @@
     "gh-pages": "^6.3.0",
     "globals": "^17.6.0",
     "vite": "^8.0.12"
+  },
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/felizondogranados-bot/flowersCrochet.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/felizondogranados-bot/flowersCrochet/issues"
   }
 }

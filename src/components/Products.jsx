@@ -4,17 +4,9 @@ import { useSearchParams } from "react-router-dom"
 
 import ProductCard from "./ProductCard"
 
-import {
-    collection,
-    getDocs
-} from "firebase/firestore"
-
-import { db } from "../firebase/firebase"
+import productos from "../data/products"
 
 function Products() {
-
-    const [productos, setProductos] =
-        useState([])
 
     const [searchParams] =
         useSearchParams()
@@ -28,46 +20,30 @@ function Products() {
     const [categoria, setCategoria] =
         useState(categoriaURL)
 
+    const [productosAdmin, setProductosAdmin] =
+        useState([])
+
     useEffect(() => {
 
-        const obtenerProductos =
-            async () => {
+        const productosGuardados =
 
-                try {
+            JSON.parse(
+                localStorage.getItem("productos")
+            ) || []
 
-                    const querySnapshot =
-                        await getDocs(
-                            collection(db, "productos")
-                        )
-
-                    const productosFirebase =
-                        querySnapshot.docs.map((doc) => ({
-
-                            id: doc.id,
-
-                            ...doc.data()
-
-                        }))
-
-                    setProductos(productosFirebase)
-
-                } catch (error) {
-
-                    console.log(
-                        "Error obteniendo productos",
-                        error
-                    )
-
-                }
-
-            }
-
-        obtenerProductos()
+        setProductosAdmin(
+            productosGuardados
+        )
 
     }, [])
 
+    const todosLosProductos = [
+        ...productos,
+        ...productosAdmin
+    ]
+
     const productosFiltrados =
-        productos.filter((producto) => {
+        todosLosProductos.filter((producto) => {
 
             const coincideBusqueda =
 
@@ -167,7 +143,7 @@ function Products() {
                         productosFiltrados.map((producto) => (
 
                             <ProductCard
-                                key={producto.id}
+                                key={String(producto.id)}
                                 producto={producto}
                             />
 

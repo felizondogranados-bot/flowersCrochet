@@ -1,51 +1,54 @@
 import { useParams } from "react-router-dom"
-import { useState, useContext } from "react"
 
 import productos from "../data/products"
 
-import { CartContext } from "../context/CartContext"
-
 function ProductDetail() {
 
-    const { id } = useParams()
+    const { id } =
+        useParams()
 
-    const producto = productos.find(
-        (p) => p.id === Number(id)
-    )
+    const productosAdmin =
 
-    const { addToCart } =
-        useContext(CartContext)
+        JSON.parse(
+            localStorage.getItem("productos")
+        ) || []
 
-    const [colorSeleccionado, setColorSeleccionado] =
-        useState("")
+    const todosLosProductos = [
+        ...productos,
+        ...productosAdmin
+    ]
 
-    const [otroColor, setOtroColor] =
-        useState("")
+    const producto =
+        todosLosProductos.find(
 
-    const [descripcion, setDescripcion] =
-        useState("")
+            (item) =>
+                item.id == id
 
-    const [cantidad, setCantidad] =
-        useState(1)
+        )
 
     if (!producto) {
 
         return (
 
-            <h1 className="text-center py-20 text-3xl">
+            <section className="min-h-screen flex items-center justify-center">
 
-                Producto no encontrado 💔
+                <h1 className="text-4xl font-bold text-pink-500">
 
-            </h1>
+                    Producto no encontrado 💔
+
+                </h1>
+
+            </section>
 
         )
+
     }
 
     return (
 
-        <section className="px-8 py-20 bg-pink-50 min-h-screen">
+        <section className="min-h-screen px-8 py-20 bg-pink-50">
 
-            <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16">
+            <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
 
                 {/* Imagen */}
                 <div>
@@ -53,19 +56,13 @@ function ProductDetail() {
                     <img
                         src={producto.imagen}
                         alt={producto.nombre}
-                        className="w-full rounded-[40px] shadow-2xl"
+                        className="w-full rounded-3xl shadow-xl"
                     />
 
                 </div>
 
-                {/* Información */}
+                {/* Info */}
                 <div>
-
-                    <p className="text-pink-400 font-medium mb-3 text-lg">
-
-                        {producto.categoria}
-
-                    </p>
 
                     <h1 className="text-5xl font-bold text-gray-800">
 
@@ -73,254 +70,26 @@ function ProductDetail() {
 
                     </h1>
 
-                    <p className="text-pink-500 text-4xl font-bold mt-6">
+                    <p className="text-pink-500 text-3xl font-bold mt-5">
 
                         ₡{producto.precio}
 
                     </p>
 
-                    <p className="text-gray-500 leading-relaxed mt-6 text-lg">
+                    <p className="text-gray-600 mt-8 text-lg leading-relaxed">
 
                         {producto.descripcion}
 
                     </p>
-
-                    {/* Colores */}
-                    {
-
-                        producto.colores && (
-
-                            <div className="mt-10">
-
-                                <h2 className="text-xl font-semibold mb-5">
-
-                                    Colores disponibles 🌸
-
-                                </h2>
-
-                                <div className="flex flex-wrap gap-4">
-
-                                    {producto.colores.map((color) => (
-
-                                        <button
-
-                                            key={color}
-
-                                            onClick={() => {
-
-                                                setColorSeleccionado(color)
-                                                setOtroColor("")
-
-                                            }}
-
-                                            className={`w-14 h-14 rounded-full border-4 transition hover:scale-110
-
-                                            ${colorSeleccionado === color
-                                                    ? "border-pink-400 scale-110"
-                                                    : "border-white"
-                                                }`}
-
-                                            style={{
-                                                backgroundColor: color
-                                            }}
-
-                                        >
-
-                                        </button>
-
-                                    ))}
-
-                                    {/* Otro color */}
-                                    <button
-
-                                        onClick={() =>
-                                            setColorSeleccionado("Otro")
-                                        }
-
-                                        className={`px-5 py-3 rounded-full border transition
-
-                                        ${colorSeleccionado === "Otro"
-                                                ? "bg-pink-400 text-white border-pink-400"
-                                                : "bg-white border-pink-200"
-                                            }`}
-                                    >
-
-                                        Otro 🌸
-
-                                    </button>
-
-                                </div>
-
-                                {/* Input otro color */}
-                                {
-
-                                    colorSeleccionado === "Otro" && (
-
-                                        <input
-                                            type="text"
-                                            placeholder="Escriba el color deseado..."
-                                            value={otroColor}
-                                            onChange={(e) =>
-                                                setOtroColor(e.target.value)
-                                            }
-                                            className="mt-5 w-full border border-pink-200 rounded-2xl p-4 outline-none bg-white"
-                                        />
-
-                                    )
-
-                                }
-
-                            </div>
-
-                        )
-
-                    }
-
-                    {/* Cantidad */}
-                    <div className="mt-10">
-
-                        <h2 className="text-xl font-semibold mb-5">
-
-                            Cantidad 🌸
-
-                        </h2>
-
-                        <div className="flex items-center gap-5">
-
-                            <button
-
-                                onClick={() => {
-
-                                    if (cantidad > 1) {
-                                        setCantidad(cantidad - 1)
-                                    }
-
-                                }}
-
-                                className="w-12 h-12 rounded-full bg-pink-100 hover:bg-pink-200 text-2xl font-bold transition"
-                            >
-
-                                -
-
-                            </button>
-
-                            <span className="text-3xl font-bold text-gray-700">
-
-                                {cantidad}
-
-                            </span>
-
-                            <button
-
-                                onClick={() =>
-                                    setCantidad(cantidad + 1)
-                                }
-
-                                className="w-12 h-12 rounded-full bg-pink-400 hover:bg-pink-500 text-white text-2xl font-bold transition"
-                            >
-
-                                +
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                    {/* Personalización */}
-                    <div className="mt-10">
-
-                        <h2 className="text-xl font-semibold mb-5">
-
-                            Personalización ✨
-
-                        </h2>
-
-                        <textarea
-                            placeholder="Describe cómo deseas tu producto..."
-                            value={descripcion}
-                            onChange={(e) =>
-                                setDescripcion(e.target.value)
-                            }
-                            className="w-full h-40 rounded-3xl border border-pink-200 p-5 outline-none resize-none bg-white"
-                        ></textarea>
-
-                    </div>
-
-                    {/* Subir imagen */}
-                    {
-
-                        producto.subirImagen && (
-
-                            <div className="mt-10">
-
-                                <h2 className="text-xl font-semibold mb-5">
-
-                                    Imagen de referencia 📸
-
-                                </h2>
-
-                                <input
-                                    type="file"
-                                    className="w-full border border-pink-200 rounded-2xl p-4 bg-white"
-                                />
-
-                            </div>
-
-                        )
-
-                    }
-
-                    {/* Botón carrito */}
-                    <button
-
-                        onClick={() => {
-
-                            const colorFinal =
-
-                                colorSeleccionado === "Otro"
-                                    ? otroColor
-                                    : colorSeleccionado
-
-                            addToCart({
-
-                                ...producto,
-
-                                cantidad,
-
-                                colorSeleccionado: colorFinal,
-
-                                descripcionPersonalizada:
-                                    descripcion,
-
-                            })
-
-                        }}
-
-                        disabled={
-                            !colorSeleccionado ||
-                            (colorSeleccionado === "Otro" && !otroColor)
-                        }
-
-                        className={`mt-12 px-10 py-5 rounded-full text-lg shadow-lg transition text-white
-
-                        ${!colorSeleccionado ||
-                                (colorSeleccionado === "Otro" && !otroColor)
-                                ? "bg-gray-300 cursor-not-allowed"
-                                : "bg-pink-500 hover:bg-pink-600"
-                            }`}
-                    >
-
-                        Agregar al carrito 🛒
-
-                    </button>
 
                 </div>
 
             </div>
 
         </section>
+
     )
+
 }
 
 export default ProductDetail

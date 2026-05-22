@@ -1,11 +1,4 @@
-import { useState } from "react"
-
-import {
-    collection,
-    addDoc
-} from "firebase/firestore"
-
-import { db } from "../firebase/firebase"
+import { useEffect, useState } from "react"
 
 function Admin() {
 
@@ -24,205 +17,449 @@ function Admin() {
     const [imagen, setImagen] =
         useState("")
 
-    const agregarProducto =
-        async (e) => {
+    const [productos, setProductos] =
+        useState([])
 
-            e.preventDefault()
+    const [editandoId, setEditandoId] =
+        useState(null)
 
-            try {
+    useEffect(() => {
 
-                await addDoc(
+        const productosGuardados =
 
-                    collection(db, "productos"),
+            JSON.parse(
+                localStorage.getItem("productos")
+            ) || []
 
-                    {
+        setProductos(
+            productosGuardados
+        )
 
-                        nombre,
+    }, [])
 
-                        precio: Number(precio),
+    const manejarImagen = (e) => {
 
-                        categoria,
+        const archivo =
+            e.target.files[0]
 
-                        descripcion,
+        if (archivo) {
 
-                        imagen
+            const urlImagen =
+                URL.createObjectURL(archivo)
 
-                    }
-
-                )
-
-                alert(
-                    "Producto agregado 😭💖"
-                )
-
-                setNombre("")
-                setPrecio("")
-                setCategoria("")
-                setDescripcion("")
-                setImagen("")
-
-            } catch (error) {
-
-                console.log(error)
-
-            }
+            setImagen(urlImagen)
 
         }
 
+    }
+
+    const guardarProducto = () => {
+
+        if (
+            !nombre ||
+            !precio ||
+            !categoria ||
+            !descripcion ||
+            !imagen
+        ) {
+
+            alert(
+                "Complete todos los campos 🌸"
+            )
+
+            return
+
+        }
+
+        const productosGuardados =
+
+            JSON.parse(
+                localStorage.getItem("productos")
+            ) || []
+
+        // EDITAR PRODUCTO
+        if (editandoId) {
+
+            const productosActualizados =
+
+                productosGuardados.map((producto) => {
+
+                    if (
+                        producto.id === editandoId
+                    ) {
+
+                        return {
+
+                            ...producto,
+
+                            nombre,
+                            precio,
+                            categoria,
+                            descripcion,
+                            imagen
+
+                        }
+
+                    }
+
+                    return producto
+
+                })
+
+            localStorage.setItem(
+
+                "productos",
+
+                JSON.stringify(
+                    productosActualizados
+                )
+
+            )
+
+            setProductos(
+                productosActualizados
+            )
+
+            alert(
+                "Producto actualizado 🌸"
+            )
+
+            setEditandoId(null)
+
+        }
+
+        // AGREGAR PRODUCTO
+        else {
+
+            const nuevoProducto = {
+
+                id: crypto.randomUUID(),
+
+                nombre,
+
+                precio,
+
+                categoria,
+
+                descripcion,
+
+                imagen
+
+            }
+
+            // IMPORTANTE:
+            // aquí NO reemplazamos,
+            // agregamos el nuevo
+
+            const nuevosProductos = [
+                ...productosGuardados,
+                nuevoProducto
+            ]
+
+            localStorage.setItem(
+
+                "productos",
+
+                JSON.stringify(
+                    nuevosProductos
+                )
+
+            )
+
+            setProductos(
+                nuevosProductos
+            )
+
+            alert(
+                "Producto agregado 🌸"
+            )
+
+        }
+
+        // LIMPIAR FORMULARIO
+        setNombre("")
+        setPrecio("")
+        setCategoria("")
+        setDescripcion("")
+        setImagen("")
+
+    }
+
+    const eliminarProducto = (id) => {
+
+        const productosActualizados =
+
+            productos.filter(
+
+                (producto) =>
+                    producto.id !== id
+
+            )
+
+        localStorage.setItem(
+
+            "productos",
+
+            JSON.stringify(
+                productosActualizados
+            )
+
+        )
+
+        setProductos(
+            productosActualizados
+        )
+
+    }
+
+    const editarProducto = (producto) => {
+
+        setNombre(
+            producto.nombre
+        )
+
+        setPrecio(
+            producto.precio
+        )
+
+        setCategoria(
+            producto.categoria
+        )
+
+        setDescripcion(
+            producto.descripcion
+        )
+
+        setImagen(
+            producto.imagen
+        )
+
+        setEditandoId(
+            producto.id
+        )
+
+        window.scrollTo({
+
+            top: 0,
+
+            behavior: "smooth"
+
+        })
+
+    }
+
     return (
 
-        <section className="min-h-screen px-8 py-20 bg-pink-50">
+        <section className="min-h-screen bg-pink-50 px-6 py-20">
 
-            <h1 className="text-5xl font-bold text-gray-800 mb-10">
+            <div className="max-w-2xl mx-auto bg-white p-10 rounded-3xl shadow-xl">
 
-                Panel Admin 🌸
+                <h1 className="text-4xl font-bold text-pink-500 mb-10 text-center">
 
-            </h1>
+                    Panel Administrador 🌸
 
-            <form
-                onSubmit={agregarProducto}
-                className="bg-white p-10 rounded-[40px] shadow-xl max-w-3xl space-y-6"
-            >
+                </h1>
 
-                {/* Nombre */}
-                <div>
+                <div className="flex flex-col gap-5">
 
-                    <label className="block mb-2 font-medium text-gray-700">
-
-                        Nombre
-
-                    </label>
-
+                    {/* Nombre */}
                     <input
                         type="text"
+                        placeholder="Nombre del producto"
                         value={nombre}
                         onChange={(e) =>
                             setNombre(e.target.value)
                         }
-                        className="w-full border border-pink-200 rounded-2xl p-4 outline-none"
-                        required
+                        className="px-5 py-3 rounded-xl border outline-none"
                     />
 
-                </div>
-
-                {/* Precio */}
-                <div>
-
-                    <label className="block mb-2 font-medium text-gray-700">
-
-                        Precio
-
-                    </label>
-
+                    {/* Precio */}
                     <input
                         type="number"
+                        placeholder="Precio"
                         value={precio}
                         onChange={(e) =>
                             setPrecio(e.target.value)
                         }
-                        className="w-full border border-pink-200 rounded-2xl p-4 outline-none"
-                        required
+                        className="px-5 py-3 rounded-xl border outline-none"
                     />
 
-                </div>
-
-                {/* Categoria */}
-                <div>
-
-                    <label className="block mb-2 font-medium text-gray-700">
-
-                        Categoría
-
-                    </label>
-
+                    {/* Categoría */}
                     <select
                         value={categoria}
                         onChange={(e) =>
                             setCategoria(e.target.value)
                         }
-                        className="w-full border border-pink-200 rounded-2xl p-4 outline-none"
-                        required
+                        className="px-5 py-3 rounded-xl border outline-none"
                     >
 
                         <option value="">
-                            Seleccione
+                            Seleccione categoría
                         </option>
 
-                        <option>
+                        <option value="Flores">
                             Flores
                         </option>
 
-                        <option>
+                        <option value="Ramos">
                             Ramos
                         </option>
 
-                        <option>
-                            Amigurumis
-                        </option>
-
-                        <option>
+                        <option value="Llaveros">
                             Llaveros
                         </option>
 
-                        <option>
+                        <option value="Amigurumis">
+                            Amigurumis
+                        </option>
+
+                        <option value="Accesorios">
                             Accesorios
                         </option>
 
                     </select>
 
-                </div>
-
-                {/* Descripcion */}
-                <div>
-
-                    <label className="block mb-2 font-medium text-gray-700">
-
-                        Descripción
-
-                    </label>
-
+                    {/* Descripción */}
                     <textarea
+                        placeholder="Descripción"
                         value={descripcion}
                         onChange={(e) =>
                             setDescripcion(e.target.value)
                         }
-                        className="w-full border border-pink-200 rounded-2xl p-4 outline-none h-32 resize-none"
+                        className="px-5 py-3 rounded-xl border outline-none h-32"
                     />
 
-                </div>
-
-                {/* Imagen */}
-                <div>
-
-                    <label className="block mb-2 font-medium text-gray-700">
-
-                        URL Imagen
-
-                    </label>
-
+                    {/* Imagen */}
                     <input
-                        type="text"
-                        value={imagen}
-                        onChange={(e) =>
-                            setImagen(e.target.value)
-                        }
-                        className="w-full border border-pink-200 rounded-2xl p-4 outline-none"
+                        type="file"
+                        accept="image/*"
+                        onChange={manejarImagen}
+                        className="px-5 py-3 rounded-xl border"
                     />
+
+                    {/* Preview */}
+                    {
+
+                        imagen && (
+
+                            <img
+                                src={imagen}
+                                alt="preview"
+                                className="w-52 h-52 object-cover rounded-2xl shadow-lg mx-auto"
+                            />
+
+                        )
+
+                    }
+
+                    {/* Botón */}
+                    <button
+                        onClick={guardarProducto}
+                        className="bg-pink-500 hover:bg-pink-600 text-white py-4 rounded-xl text-lg font-semibold transition"
+                    >
+
+                        {
+
+                            editandoId
+
+                                ? "Actualizar Producto 🌸"
+
+                                : "Guardar Producto 🌸"
+
+                        }
+
+                    </button>
 
                 </div>
 
-                <button
-                    type="submit"
-                    className="w-full bg-pink-500 hover:bg-pink-600 text-white py-4 rounded-full text-lg transition"
-                >
+            </div>
 
-                    Agregar producto 🌸
+            {/* PRODUCTOS AGREGADOS */}
+            <div className="max-w-7xl mx-auto mt-20">
 
-                </button>
+                <h2 className="text-4xl font-bold text-pink-500 mb-10">
 
-            </form>
+                    Productos agregados 🌸
+
+                </h2>
+
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    {
+
+                        productos.map((producto) => (
+
+                            <div
+                                key={producto.id}
+                                className="bg-white p-5 rounded-3xl shadow-lg"
+                            >
+
+                                <img
+                                    src={producto.imagen}
+                                    alt={producto.nombre}
+                                    className="w-full h-64 object-cover rounded-2xl"
+                                />
+
+                                <h3 className="text-2xl font-bold mt-4 text-gray-800">
+
+                                    {producto.nombre}
+
+                                </h3>
+
+                                <p className="text-pink-500 font-bold text-lg mt-2">
+
+                                    ₡{producto.precio}
+
+                                </p>
+
+                                <p className="text-gray-500 mt-3">
+
+                                    {producto.descripcion}
+
+                                </p>
+
+                                <div className="flex gap-3 mt-5">
+
+                                    <button
+
+                                        onClick={() =>
+                                            editarProducto(producto)
+                                        }
+
+                                        className="flex-1 bg-blue-400 hover:bg-blue-500 text-white py-3 rounded-full"
+                                    >
+
+                                        Editar ✏️
+
+                                    </button>
+
+                                    <button
+
+                                        onClick={() =>
+                                            eliminarProducto(producto.id)
+                                        }
+
+                                        className="flex-1 bg-red-400 hover:bg-red-500 text-white py-3 rounded-full"
+                                    >
+
+                                        Eliminar ❌
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        ))
+
+                    }
+
+                </div>
+
+            </div>
 
         </section>
+
     )
 
 }
