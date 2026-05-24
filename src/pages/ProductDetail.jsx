@@ -1,95 +1,316 @@
-import { useParams } from "react-router-dom"
-
+import { useState, useContext } from "react"
+import { useParams, useNavigate } from "react-router-dom"
+import { CartContext } from "../context/CartContext"
+import { FavoritesContext } from "../context/FavoritesContext"
 import productos from "../data/products"
 
 function ProductDetail() {
 
-    const { id } =
-        useParams()
+    const { addToCart } = useContext(CartContext)
+    const { favorites, toggleFavorite } = useContext(FavoritesContext)
+    const { id } = useParams()
+    const navigate = useNavigate()
 
-    const productosAdmin =
-
-        JSON.parse(
-            localStorage.getItem("productos")
-        ) || []
-
-    const todosLosProductos = [
-        ...productos,
-        ...productosAdmin
-    ]
-
-    const producto =
-        todosLosProductos.find(
-
-            (item) =>
-                item.id == id
-
-        )
+    const producto = productos.find(p => p.id === parseInt(id))
 
     if (!producto) {
-
         return (
-
-            <section className="min-h-screen flex items-center justify-center">
-
-                <h1 className="text-4xl font-bold text-pink-500">
-
-                    Producto no encontrado 💔
-
-                </h1>
-
+            <section className="min-h-screen bg-pink-50 px-8 py-20 flex items-center justify-center">
+                <div className="text-center">
+                    <h1 className="text-4xl font-bold text-gray-800 mb-4">Producto no encontrado 😢</h1>
+                    <button
+                        onClick={() => navigate("/catalogo")}
+                        className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded-full transition"
+                    >
+                        Volver al catálogo
+                    </button>
+                </div>
             </section>
-
         )
+    }
 
+    const esFavorito = favorites.find(item => item.id === producto.id)
+
+    const colores = [
+        "#ff69b4",
+        "#ff0000",
+        "#ffffff",
+        "#000000",
+        "#9370db",
+        "#87ceeb",
+        "#90ee90",
+        "#ffd700",
+        "#ffb347",
+        "#98d8c8"
+    ]
+
+    const [colorFlor, setColorFlor] = useState("")
+    const [otroColorFlor, setOtroColorFlor] = useState("")
+    const [colorDecoracion, setColorDecoracion] = useState("")
+    const [otraDecoracion, setOtraDecoracion] = useState("")
+    const [cantidad, setCantidad] = useState(1)
+    const [descripcionCliente, setDescripcionCliente] = useState("")
+
+    const agregarCarrito = () => {
+        if (!colorFlor && !otroColorFlor) {
+            alert("Por favor selecciona un color para la flor 🌸")
+            return
+        }
+
+        const productoCarrito = {
+            ...producto,
+            colorFlor: colorFlor === "otro" ? otroColorFlor : colorFlor,
+            colorDecoracion: colorDecoracion === "otro" ? otraDecoracion : colorDecoracion,
+            cantidad,
+            descripcionCliente,
+            cartId: Date.now()
+        }
+
+        addToCart(productoCarrito)
+        alert(`✨ ¡${producto.nombre} agregado al carrito! ✨`)
+        
+        // Resetear formulario
+        setColorFlor("")
+        setOtroColorFlor("")
+        setColorDecoracion("")
+        setOtraDecoracion("")
+        setCantidad(1)
+        setDescripcionCliente("")
     }
 
     return (
-
-        <section className="min-h-screen px-8 py-20 bg-pink-50">
-
-            <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-
-                {/* Imagen */}
-                <div>
-
-                    <img
-                        src={producto.imagen}
-                        alt={producto.nombre}
-                        className="w-full rounded-3xl shadow-xl"
-                    />
-
+        <section className="min-h-screen bg-pink-50 px-4 md:px-8 py-20">
+            <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-16 items-start">
+                
+                {/* Imagen del Producto */}
+                <div className="flex flex-col gap-6">
+                    <div className="relative rounded-3xl shadow-2xl overflow-hidden bg-white">
+                        <img
+                            src={producto.imagen}
+                            alt={producto.nombre}
+                            className="w-full h-[400px] md:h-[500px] object-cover"
+                        />
+                    </div>
                 </div>
 
-                {/* Info */}
+                {/* Información del Producto */}
                 <div>
-
-                    <h1 className="text-5xl font-bold text-gray-800">
-
+                    <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-3">
                         {producto.nombre}
-
                     </h1>
 
-                    <p className="text-pink-500 text-3xl font-bold mt-5">
+                    {/* Categoría y Precio */}
+                    <div className="flex items-center gap-4 mb-6">
+                        <span className="bg-pink-200 text-pink-700 px-4 py-2 rounded-full font-semibold">
+                            {producto.categoria}
+                        </span>
+                        <p className="text-3xl md:text-4xl font-bold text-pink-500">
+                            ₡{producto.precio.toLocaleString()}
+                        </p>
+                    </div>
 
-                        ₡{producto.precio}
-
-                    </p>
-
-                    <p className="text-gray-600 mt-8 text-lg leading-relaxed">
-
+                    {/* Descripción */}
+                    <p className="text-gray-600 mb-8 text-lg leading-relaxed">
                         {producto.descripcion}
-
                     </p>
+
+                    {/* Separador */}
+                    <div className="h-1 bg-gradient-to-r from-pink-300 to-pink-100 mb-8 rounded-full"></div>
+
+                    {/* COLOR FLOR */}
+                    <div className="mb-10">
+                        <h3 className="text-2xl font-bold mb-5 text-gray-800">
+                            🌸 Color de la flor
+                        </h3>
+
+                        <div className="flex flex-wrap gap-4 mb-6">
+                            {colores.map((color) => (
+                                <button
+                                    key={color}
+                                    onClick={() => {
+                                        setColorFlor(color)
+                                        setOtroColorFlor("")
+                                    }}
+                                    className={`w-14 h-14 rounded-full border-4 transition transform hover:scale-110 ${
+                                        colorFlor === color
+                                            ? "border-gray-900 scale-110 shadow-lg"
+                                            : "border-gray-300 hover:border-gray-400"
+                                    }`}
+                                    style={{ backgroundColor: color }}
+                                    title={color}
+                                />
+                            ))}
+                        </div>
+
+                        <button
+                            onClick={() => setColorFlor("otro")}
+                            className={`px-6 py-3 rounded-full font-semibold transition ${
+                                colorFlor === "otro"
+                                    ? "bg-pink-500 text-white"
+                                    : "bg-pink-100 hover:bg-pink-200 text-pink-700"
+                            }`}
+                        >
+                            ✨ Otro color
+                        </button>
+
+                        {colorFlor === "otro" && (
+                            <input
+                                type="text"
+                                placeholder="Ej: Azul marino, Morado, etc..."
+                                value={otroColorFlor}
+                                onChange={(e) => setOtroColorFlor(e.target.value)}
+                                className="mt-4 w-full px-5 py-3 rounded-xl border-2 border-pink-300 outline-none focus:border-pink-500 transition"
+                            />
+                        )}
+
+                        {(colorFlor && colorFlor !== "otro") && (
+                            <div className="mt-4 p-4 bg-white rounded-xl border-2 border-pink-200 flex items-center gap-3">
+                                <div
+                                    className="w-10 h-10 rounded-full border-2 border-gray-300"
+                                    style={{ backgroundColor: colorFlor }}
+                                ></div>
+                                <span className="font-semibold text-gray-700">Color seleccionado</span>
+                            </div>
+                        )}
+
+                        {otroColorFlor && (
+                            <div className="mt-4 p-4 bg-white rounded-xl border-2 border-pink-200">
+                                <span className="font-semibold text-gray-700">Color: {otroColorFlor}</span>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* DECORACIÓN */}
+                    <div className="mb-10">
+                        <h3 className="text-2xl font-bold mb-5 text-gray-800">
+                            🎀 Color de decoración (Opcional)
+                        </h3>
+
+                        <div className="flex flex-wrap gap-4 mb-6">
+                            {colores.map((color) => (
+                                <button
+                                    key={color}
+                                    onClick={() => {
+                                        setColorDecoracion(color)
+                                        setOtraDecoracion("")
+                                    }}
+                                    className={`w-14 h-14 rounded-full border-4 transition transform hover:scale-110 ${
+                                        colorDecoracion === color
+                                            ? "border-gray-900 scale-110 shadow-lg"
+                                            : "border-gray-300 hover:border-gray-400"
+                                    }`}
+                                    style={{ backgroundColor: color }}
+                                    title={color}
+                                />
+                            ))}
+                        </div>
+
+                        <button
+                            onClick={() => setColorDecoracion("otro")}
+                            className={`px-6 py-3 rounded-full font-semibold transition ${
+                                colorDecoracion === "otro"
+                                    ? "bg-pink-500 text-white"
+                                    : "bg-pink-100 hover:bg-pink-200 text-pink-700"
+                            }`}
+                        >
+                            ✨ Otro color
+                        </button>
+
+                        {colorDecoracion === "otro" && (
+                            <input
+                                type="text"
+                                placeholder="Ej: Dorado, Plata, etc..."
+                                value={otraDecoracion}
+                                onChange={(e) => setOtraDecoracion(e.target.value)}
+                                className="mt-4 w-full px-5 py-3 rounded-xl border-2 border-pink-300 outline-none focus:border-pink-500 transition"
+                            />
+                        )}
+
+                        {colorDecoracion && colorDecoracion !== "otro" && (
+                            <div className="mt-4 p-4 bg-white rounded-xl border-2 border-pink-200 flex items-center gap-3">
+                                <div
+                                    className="w-10 h-10 rounded-full border-2 border-gray-300"
+                                    style={{ backgroundColor: colorDecoracion }}
+                                ></div>
+                                <span className="font-semibold text-gray-700">Decoración seleccionada</span>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* CANTIDAD */}
+                    <div className="mb-10">
+                        <h3 className="text-2xl font-bold mb-5 text-gray-800">
+                            📦 Cantidad
+                        </h3>
+
+                        <div className="flex items-center gap-4">
+                            <button
+                                onClick={() => cantidad > 1 && setCantidad(cantidad - 1)}
+                                className="bg-pink-200 hover:bg-pink-300 text-pink-700 w-12 h-12 rounded-lg font-bold text-xl transition"
+                            >
+                                −
+                            </button>
+
+                            <input
+                                type="number"
+                                min="1"
+                                value={cantidad}
+                                onChange={(e) => setCantidad(Math.max(1, Number(e.target.value)))}
+                                className="w-20 px-4 py-3 border-2 border-pink-300 rounded-lg text-center font-bold text-lg outline-none focus:border-pink-500 transition"
+                            />
+
+                            <button
+                                onClick={() => setCantidad(cantidad + 1)}
+                                className="bg-pink-200 hover:bg-pink-300 text-pink-700 w-12 h-12 rounded-lg font-bold text-xl transition"
+                            >
+                                +
+                            </button>
+
+                            <span className="text-gray-600 font-semibold ml-4">
+                                Subtotal: ₡{(producto.precio * cantidad).toLocaleString()}
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* DESCRIPCIÓN */}
+                    <div className="mb-10">
+                        <h3 className="text-2xl font-bold mb-5 text-gray-800">
+                            💬 Detalles especiales (Opcional)
+                        </h3>
+
+                        <textarea
+                            placeholder="Escribe aquí cualquier detalle especial que desees (máximo 200 caracteres)..."
+                            value={descripcionCliente}
+                            onChange={(e) => setDescripcionCliente(e.target.value.slice(0, 200))}
+                            maxLength="200"
+                            className="w-full h-24 px-5 py-4 rounded-2xl border-2 border-pink-300 outline-none focus:border-pink-500 transition resize-none"
+                        />
+                        <p className="text-sm text-gray-500 mt-2">
+                            {descripcionCliente.length}/200 caracteres
+                        </p>
+                    </div>
+
+                    {/* BOTÓN AGREGAR AL CARRITO */}
+                    <button
+                        onClick={agregarCarrito}
+                        className="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white px-10 py-5 rounded-2xl text-xl font-bold transition shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-3 mb-4"
+                    >
+                        🛒 Agregar al carrito
+                    </button>
+
+                    {/* Botón volver */}
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="w-full bg-white border-2 border-gray-300 hover:bg-gray-50 text-gray-700 px-10 py-3 rounded-2xl text-lg font-semibold transition"
+                    >
+                        ← Volver
+                    </button>
 
                 </div>
 
             </div>
-
         </section>
-
     )
-
 }
 
 export default ProductDetail

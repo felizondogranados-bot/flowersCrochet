@@ -1,23 +1,19 @@
 import React from 'react'
+
 import ReactDOM from 'react-dom/client'
+
 import App from './App.jsx'
+
 import './index.css'
 
-import FavoritesProvider from './context/FavoritesContext'
-import CartProvider from './context/CartContext'
+ReactDOM.createRoot(
+  document.getElementById('root')
+).render(
 
-ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
 
-    <FavoritesProvider>
-
-      <CartProvider>
-
-        <App />
-
-      </CartProvider>
-
-    </FavoritesProvider>
+    <App />
 
   </React.StrictMode>
+
 )

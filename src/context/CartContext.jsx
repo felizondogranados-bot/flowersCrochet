@@ -1,56 +1,29 @@
-import { createContext, useState } from "react"
+import {
+
+    createContext,
+
+    useState
+
+} from "react"
 
 export const CartContext =
     createContext()
 
-function CartProvider({ children }) {
+function CartProvider({
+
+    children
+
+}) {
 
     const [cart, setCart] =
         useState([])
 
-    const addToCart = (producto) => {
+    const addToCart =
+        (producto) => {
 
-        const productoExistente =
-            cart.find(
+            setCart((prev) => [
 
-                (item) =>
-
-                    item.id === producto.id &&
-                    item.colorSeleccionado === producto.colorSeleccionado &&
-                    item.descripcionPersonalizada === producto.descripcionPersonalizada
-
-            )
-
-        if (productoExistente) {
-
-            setCart(
-
-                cart.map((item) =>
-
-                    item.id === producto.id &&
-                    item.colorSeleccionado === producto.colorSeleccionado &&
-                    item.descripcionPersonalizada === producto.descripcionPersonalizada
-
-                        ? {
-
-                            ...item,
-
-                            cantidad:
-                                item.cantidad + producto.cantidad
-
-                        }
-
-                        : item
-
-                )
-
-            )
-
-        } else {
-
-            setCart([
-
-                ...cart,
+                ...prev,
 
                 producto
 
@@ -58,29 +31,32 @@ function CartProvider({ children }) {
 
         }
 
-    }
+    const removeFromCart =
+        (cartId) => {
 
-    const removeFromCart = (id) => {
+            setCart((prev) =>
 
-        setCart(
+                prev.filter(
 
-            cart.filter(
+                    (item) => item.cartId !== cartId
 
-                (item) => item.id !== id
+                )
 
             )
 
-        )
-
-    }
+        }
 
     return (
 
         <CartContext.Provider
             value={{
+
                 cart,
+
                 addToCart,
-                removeFromCart,
+
+                removeFromCart
+
             }}
         >
 
@@ -89,6 +65,7 @@ function CartProvider({ children }) {
         </CartContext.Provider>
 
     )
+
 }
 
 export default CartProvider

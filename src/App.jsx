@@ -1,66 +1,72 @@
-import Navbar from "./components/Navbar"
-
-import Home from "./pages/Home"
-import Catalogo from "./pages/Catalogo"
-import Favoritos from "./pages/Favoritos"
-import ScrollToTop from "./components/ScrollToTop"
-import Carrito from "./pages/Carrito"
-import ProductDetail from "./pages/ProductDetail"
-import Admin from "./pages/Admin"
-
 import {
   BrowserRouter,
   Routes,
-  Route,
+  Route
 } from "react-router-dom"
+
+import CartProvider from "./context/CartContext"
+import FavoritesProvider from "./context/FavoritesContext"
+
+import Navbar from "./components/Navbar"
+import ScrollToTop from "./components/ScrollToTop"
+
+import Home from "./pages/Home"
+import Catalogo from "./pages/Catalogo"
+import Carrito from "./pages/Carrito"
+import Favoritos from "./pages/Favoritos"
+import ProductDetail from "./pages/ProductDetail"
 
 function App() {
 
   return (
 
-    <BrowserRouter basename="/flowersCrochet">
+    <CartProvider>
 
-      <ScrollToTop />
+      <FavoritesProvider>
 
-      <div className="bg-pink-50 min-h-screen">
+        <BrowserRouter basename="/flowersCrochet/">
 
-        <Navbar />
+          <Navbar />
 
-        <Routes>
+          <ScrollToTop />
 
-          <Route
-            path="/"
-            element={<Home />}
-          />
+          <Routes>
 
-          <Route
-            path="/catalogo"
-            element={<Catalogo />}
-          />
-          <Route 
-          path="/admin" 
-          element={<Admin />} />
+            <Route
+              path="/"
+              element={<Home />}
+            />
 
-          <Route
-            path="/favoritos"
-            element={<Favoritos />}
-          />
+            <Route
+              path="/catalogo"
+              element={<Catalogo />}
+            />
 
-          <Route
-            path="/carrito"
-            element={<Carrito />}
-          />
-          <Route
-            path="/producto/:id"
-            element={<ProductDetail />}
-          />
+            <Route
+              path="/carrito"
+              element={<Carrito />}
+            />
 
-        </Routes>
+            <Route
+              path="/favoritos"
+              element={<Favoritos />}
+            />
 
-      </div>
+            <Route
+              path="/producto/:id"
+              element={<ProductDetail />}
+            />
 
-    </BrowserRouter>
+          </Routes>
+
+        </BrowserRouter>
+
+      </FavoritesProvider>
+
+    </CartProvider>
+
   )
+
 }
 
 export default App
