@@ -39,6 +39,7 @@ export const generarPDFPedido = async (cart, datos, total) => {
             <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
                 <thead>
                     <tr style="background-color: #fce7f3; border-bottom: 2px solid #ec4899;">
+                        <th style="padding: 10px; text-align: left; color: #333; width: 80px;">Imagen</th>
                         <th style="padding: 10px; text-align: left; color: #333;">Producto</th>
                         <th style="padding: 10px; text-align: center; color: #333;">Cant.</th>
                         <th style="padding: 10px; text-align: right; color: #333;">Precio Unit.</th>
@@ -61,10 +62,13 @@ export const generarPDFPedido = async (cart, datos, total) => {
             }
 
             htmlContent += `
-                <tr style="border-bottom: 1px solid #f0f0f0;">
+                <tr style="border-bottom: 1px solid #f0f0f0; vertical-align: top;">
+                    <td style="padding: 10px; text-align: center;">
+                        <img src="${item.imagen}" alt="${item.nombre}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 5px; border: 1px solid #ddd;" />
+                    </td>
                     <td style="padding: 15px; color: #333;">
                         <strong>${item.nombre}</strong>
-                        ${coloresInfo.length > 0 ? `<br><small style="color: #999;">${coloresInfo.join(', ')}</small>` : ''}
+                        ${coloresInfo.length > 0 ? `<br><small style="color: #999; font-size: 11px;">${coloresInfo.join(', ')}</small>` : ''}
                     </td>
                     <td style="padding: 15px; text-align: center; color: #333;">${item.cantidad}</td>
                     <td style="padding: 15px; text-align: right; color: #333;">₡${item.precio.toLocaleString()}</td>

@@ -17,7 +17,7 @@
  * @context
  */
 
-import { createContext, useState } from "react"
+import { createContext, useState, useEffect } from "react"
 
 /**
  * FavoritesContext - Contexto global de favoritos
@@ -32,8 +32,16 @@ export const FavoritesContext = createContext()
  */
 function FavoritesProvider({ children }) {
 
-  // Estado global de productos favoritos
-  const [favorites, setFavorites] = useState([])
+  // Estado global de productos favoritos - persistente en localStorage
+  const [favorites, setFavorites] = useState(() => {
+    const favoritosGuardados = localStorage.getItem('flowersCrochet_favorites')
+    return favoritosGuardados ? JSON.parse(favoritosGuardados) : []
+  })
+
+  // Guardar favoritos en localStorage cada vez que cambia
+  useEffect(() => {
+    localStorage.setItem('flowersCrochet_favorites', JSON.stringify(favorites))
+  }, [favorites])
 
   /**
    * Alterna un producto entre favoritos y no favoritos

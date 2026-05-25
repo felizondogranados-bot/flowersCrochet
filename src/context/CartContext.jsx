@@ -22,7 +22,8 @@
 
 import {
     createContext,
-    useState
+    useState,
+    useEffect
 } from "react"
 
 /**
@@ -38,8 +39,16 @@ export const CartContext = createContext()
  */
 function CartProvider({ children }) {
 
-    // Estado global del carrito
-    const [cart, setCart] = useState([])
+    // Estado global del carrito - persistente en localStorage
+    const [cart, setCart] = useState(() => {
+        const cartGuardado = localStorage.getItem('flowersCrochet_cart')
+        return cartGuardado ? JSON.parse(cartGuardado) : []
+    })
+
+    // Guardar carrito en localStorage cada vez que cambia
+    useEffect(() => {
+        localStorage.setItem('flowersCrochet_cart', JSON.stringify(cart))
+    }, [cart])
 
     /**
      * Agrega un producto al carrito
