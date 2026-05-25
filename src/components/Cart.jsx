@@ -20,12 +20,15 @@
 
 import { useContext, useState } from "react"
 import { CartContext } from "../context/CartContext"
+import { generarPDFPedido } from "../utils/generatePDF"
 
 /**
  * Componente Cart
  * Gestiona la visualización y procesamiento del carrito de compras
  */
 function Cart() {
+    // Estado para mostrar spinner durante generación de PDF
+    const [generandoPDF, setGenerandoPDF] = useState(false)
     // Contexto del carrito - proporciona cart y removeFromCart
     const { cart, removeFromCart } = useContext(CartContext)
 
@@ -82,10 +85,74 @@ function Cart() {
     }
 
     /**
+     * Genera PDF y luego abre WhatsApp
+     * El PDF contiene resumen de pedido con imágenes y datos del cliente
+     * @async
+     * @function
+     */
+    const generarPDFYEnviar = async () => {
+        if (!validarFormulario()) return
+
+        setGenerandoPDF(true)
+
+        try {
+            // Preparar datos del cliente
+            const datosCliente = {
+                nombreCliente,
+                fechaEntrega,
+                tipoEntrega,
+                lugarEntrega: tipoEntrega === "personal" ? lugarEntrega : null,
+                telefonoCliente: tipoEntrega === "correo" ? telefonoCliente : null,
+                provincia: tipoEntrega === "correo" ? provincia : null,
+                canton: tipoEntrega === "correo" ? canton : null,
+                distrito: tipoEntrega === "correo" ? distrito : null,
+                direccionExacta: tipoEntrega === "correo" ? direccionExacta : null,
+            }
+
+            // Generar PDF
+            const pdfGenerado = await generarPDFPedido(
+                cart,
+                datosCliente,
+                calcularTotal()
+            )
+
+            if (pdfGenerado) {
+                // Abrir WhatsApp con mensaje informativo
+                const mensaje = encodeURIComponent(
+                    `🌸 ¡Hola! Envío mi pedido de Flowers Crochet.\n\n` +
+                    `👤 Cliente: ${nombreCliente}\n` +
+                    `📅 Fecha de entrega: ${fechaEntrega}\n` +
+                    `📦 Productos: ${cart.length}\n` +
+                    `💰 Total: ₡${calcularTotal().toLocaleString()}\n\n` +
+                    `📎 El PDF detallado se descargó automáticamente a mi dispositivo.\n\n` +
+                    `Gracias 💖`
+                )
+
+                const url = `https://wa.me/50688115650?text=${mensaje}`
+                setTimeout(() => {
+                    window.open(url, "_blank")
+                }, 1000)
+
+                // Mostrar confirmación
+                alert("✅ PDF generado y descargado exitosamente!\n\n" +
+                    "Se abrirá WhatsApp para que confirmes tu pedido.")
+            } else {
+                alert("❌ Error al generar el PDF. Intenta de nuevo.")
+            }
+        } catch (error) {
+            console.error("Error:", error)
+            alert("❌ Error al procesar tu pedido. Intenta de nuevo.")
+        } finally {
+            setGenerandoPDF(false)
+        }
+    }
+
+    /**
      * Construye un mensaje formateado y lo envía por WhatsApp
      * Incluye información del cliente, productos, y detalles de pago
      * Valida el formulario antes de enviar
      * @function
+     * @deprecated Usar generarPDFYEnviar en su lugar
      */
     const enviarWhatsApp = () => {
         if (!validarFormulario()) return
@@ -487,10 +554,24 @@ function Cart() {
 
                                 {/* BOTÓN REALIZAR PEDIDO */}
                                 <button
-                                    onClick={enviarWhatsApp}
-                                    className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-5 rounded-2xl text-xl font-bold shadow-lg hover:shadow-xl transition transform hover:scale-105 flex items-center justify-center gap-3"
+                                    onClick={generarPDFYEnviar}
+                                    disabled={generandoPDF}
+                                    className={`w-full py-5 rounded-2xl text-xl font-bold shadow-lg transition transform flex items-center justify-center gap-3 ${
+                                        generandoPDF
+                                            ? 'bg-gray-400 cursor-not-allowed'
+                                            : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:scale-105'
+                                    } text-white`}
                                 >
-                                    📲 Realizar pedido por WhatsApp
+                                    {generandoPDF ? (
+                                        <>
+                                            <span className="animate-spin">⏳</span>
+                                            Generando PDF...
+                                        </>
+                                    ) : (
+                                        <>
+                                            📄 Generar PDF y enviar por WhatsApp
+                                        </>
+                                    )}
                                 </button>
 
                             </div>
