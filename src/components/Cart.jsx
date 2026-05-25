@@ -33,7 +33,7 @@ function Cart() {
     const [fechaEntrega, setFechaEntrega] = useState("")
     const [tipoEntrega, setTipoEntrega] = useState("personal")
     const [lugarEntrega, setLugarEntrega] = useState("")
-    
+
     // Estados para envío por correos
     const [telefonoCliente, setTelefonoCliente] = useState("")
     const [provincia, setProvincia] = useState("")
@@ -116,16 +116,17 @@ function Cart() {
         mensaje += `*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*%0A%0A`
 
         cart.forEach((item, index) => {
+
             mensaje += `*${index + 1}. ${item.nombre}*%0A`
             mensaje += `💰 Precio unitario: ₡${item.precio.toLocaleString()}%0A`
             mensaje += `📦 Cantidad: ${item.cantidad}%0A`
 
             if (item.colorFlor) {
-                mensaje += `🌸 Color de flor: ${item.colorFlor}%0A`
+                mensaje += `🌸 Color: ${item.colorFlor.nombre}%0A`
             }
 
             if (item.colorDecoracion) {
-                mensaje += `🎀 Color de decoración: ${item.colorDecoracion}%0A`
+                mensaje += `🎀 Decoración: ${item.colorDecoracion.nombre}%0A`
             }
 
             if (item.descripcionCliente) {
@@ -133,6 +134,7 @@ function Cart() {
             }
 
             mensaje += `💵 Subtotal: ₡${(item.precio * item.cantidad).toLocaleString()}%0A%0A`
+
         })
 
         const total = calcularTotal()
@@ -219,15 +221,45 @@ function Cart() {
                                                     </div>
 
                                                     {item.colorFlor && (
-                                                        <p className="text-xs text-gray-600 mb-1">
-                                                            🌸 Color: {item.colorFlor}
-                                                        </p>
+                                                        <div className="flex items-center gap-2 mb-1">
+
+                                                            <span className="text-xs text-gray-600">
+                                                                🌸 Color:
+                                                            </span>
+
+                                                            <div
+                                                                className="w-4 h-4 rounded-full border border-gray-300 shadow-sm"
+                                                                style={{
+                                                                    backgroundColor: item.colorFlor.codigo
+                                                                }}
+                                                            ></div>
+
+                                                            <span className="text-xs text-gray-500">
+                                                                {item.colorFlor.nombre}
+                                                            </span>
+
+                                                        </div>
                                                     )}
 
                                                     {item.colorDecoracion && (
-                                                        <p className="text-xs text-gray-600 mb-1">
-                                                            🎀 Decoración: {item.colorDecoracion}
-                                                        </p>
+                                                        <div className="flex items-center gap-2 mb-1">
+
+                                                            <span className="text-xs text-gray-600">
+                                                                🎀 Decoración:
+                                                            </span>
+
+                                                            <div
+                                                                className="w-4 h-4 rounded-full border border-gray-300 shadow-sm"
+                                                                style={{
+                                                                    backgroundColor: item.colorDecoracion.codigo
+                                                                }}
+                                                            ></div>
+
+                                                            <span className="text-xs text-gray-500">
+                                                                {item.colorDecoracion.nombre}
+                                                            </span>
+
+                                                        </div>
                                                     )}
 
                                                     <p className="font-bold text-pink-500 text-sm">

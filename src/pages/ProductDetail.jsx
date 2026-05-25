@@ -31,17 +31,87 @@ function ProductDetail() {
 
     const esFavorito = favorites.find(item => item.id === producto.id)
 
-    const colores = [
-        "#ff69b4",
-        "#ff0000",
-        "#ffffff",
-        "#000000",
-        "#9370db",
-        "#87ceeb",
-        "#90ee90",
-        "#ffd700",
-        "#ffb347",
-        "#98d8c8"
+    const coloresFlor = [
+
+        {
+            nombre: "Rosado",
+            codigo: "#ff69b4"
+        },
+
+        {
+            nombre: "Rojo",
+            codigo: "#ff0000"
+        },
+
+        {
+            nombre: "Blanco",
+            codigo: "#ffffff"
+        },
+
+        {
+            nombre: "Negro",
+            codigo: "#000000"
+        },
+
+        {
+            nombre: "Lila",
+            codigo: "#9370db"
+        },
+
+        {
+            nombre: "Celeste",
+            codigo: "#87ceeb"
+        },
+
+        {
+            nombre: "Verde",
+            codigo: "#90ee90"
+        },
+
+        {
+            nombre: "Amarillo",
+            codigo: "#ffd700"
+        },
+
+        {
+            nombre: "Naranja",
+            codigo: "#ffb347"
+        },
+
+        {
+            nombre: "Menta",
+            codigo: "#98d8c8"
+        }
+
+    ]
+
+    const coloresDecoracion = [
+
+        {
+            nombre: "Dorado",
+            codigo: "#d4af37"
+        },
+
+        {
+            nombre: "Plateado",
+            codigo: "#c0c0c0"
+        },
+
+        {
+            nombre: "Blanco",
+            codigo: "#ffffff"
+        },
+
+        {
+            nombre: "Negro",
+            codigo: "#000000"
+        },
+
+        {
+            nombre: "Rosado Pastel",
+            codigo: "#f8c8dc"
+        }
+
     ]
 
     const [colorFlor, setColorFlor] = useState("")
@@ -68,7 +138,7 @@ function ProductDetail() {
 
         addToCart(productoCarrito)
         alert(`✨ ¡${producto.nombre} agregado al carrito! ✨`)
-        
+
         // Resetear formulario
         setColorFlor("")
         setOtroColorFlor("")
@@ -81,7 +151,7 @@ function ProductDetail() {
     return (
         <section className="min-h-screen bg-pink-50 px-4 md:px-8 py-20">
             <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-16 items-start">
-                
+
                 {/* Imagen del Producto */}
                 <div className="flex flex-col gap-6">
                     <div className="relative rounded-3xl shadow-2xl overflow-hidden bg-white">
@@ -124,31 +194,29 @@ function ProductDetail() {
                         </h3>
 
                         <div className="flex flex-wrap gap-4 mb-6">
-                            {colores.map((color) => (
+                            {coloresFlor.map((color) => (
                                 <button
-                                    key={color}
+                                    key={color.codigo}
                                     onClick={() => {
                                         setColorFlor(color)
                                         setOtroColorFlor("")
                                     }}
-                                    className={`w-14 h-14 rounded-full border-4 transition transform hover:scale-110 ${
-                                        colorFlor === color
-                                            ? "border-gray-900 scale-110 shadow-lg"
-                                            : "border-gray-300 hover:border-gray-400"
-                                    }`}
-                                    style={{ backgroundColor: color }}
-                                    title={color}
+                                    className={`w-14 h-14 rounded-full border-4 transition transform hover:scale-110 ${colorFlor?.codigo === color.codigo
+                                        ? "border-gray-900 scale-110 shadow-lg"
+                                        : "border-gray-300 hover:border-gray-400"
+                                        }`}
+                                    style={{ backgroundColor: color.codigo }}
+                                    title={color.nombre}
                                 />
                             ))}
                         </div>
 
                         <button
                             onClick={() => setColorFlor("otro")}
-                            className={`px-6 py-3 rounded-full font-semibold transition ${
-                                colorFlor === "otro"
-                                    ? "bg-pink-500 text-white"
-                                    : "bg-pink-100 hover:bg-pink-200 text-pink-700"
-                            }`}
+                            className={`px-6 py-3 rounded-full font-semibold transition ${colorFlor === "otro"
+                                ? "bg-pink-500 text-white"
+                                : "bg-pink-100 hover:bg-pink-200 text-pink-700"
+                                }`}
                         >
                             ✨ Otro color
                         </button>
@@ -167,9 +235,11 @@ function ProductDetail() {
                             <div className="mt-4 p-4 bg-white rounded-xl border-2 border-pink-200 flex items-center gap-3">
                                 <div
                                     className="w-10 h-10 rounded-full border-2 border-gray-300"
-                                    style={{ backgroundColor: colorFlor }}
+                                    style={{ backgroundColor: colorFlor.codigo }}
                                 ></div>
-                                <span className="font-semibold text-gray-700">Color seleccionado</span>
+                                <span className="font-semibold text-gray-700">
+                                    {colorFlor.nombre}
+                                </span>
                             </div>
                         )}
 
@@ -187,31 +257,29 @@ function ProductDetail() {
                         </h3>
 
                         <div className="flex flex-wrap gap-4 mb-6">
-                            {colores.map((color) => (
+                            {coloresDecoracion.map((color) => (
                                 <button
-                                    key={color}
+                                    key={color.codigo}
                                     onClick={() => {
                                         setColorDecoracion(color)
                                         setOtraDecoracion("")
                                     }}
-                                    className={`w-14 h-14 rounded-full border-4 transition transform hover:scale-110 ${
-                                        colorDecoracion === color
+                                    className={`w-14 h-14 rounded-full border-4 transition transform hover:scale-110 ${colorDecoracion?.codigo === color.codigo
                                             ? "border-gray-900 scale-110 shadow-lg"
                                             : "border-gray-300 hover:border-gray-400"
-                                    }`}
-                                    style={{ backgroundColor: color }}
-                                    title={color}
+                                        }`}
+                                    style={{ backgroundColor: color.codigo }}
+                                    title={color.nombre}
                                 />
                             ))}
                         </div>
 
                         <button
                             onClick={() => setColorDecoracion("otro")}
-                            className={`px-6 py-3 rounded-full font-semibold transition ${
-                                colorDecoracion === "otro"
-                                    ? "bg-pink-500 text-white"
-                                    : "bg-pink-100 hover:bg-pink-200 text-pink-700"
-                            }`}
+                            className={`px-6 py-3 rounded-full font-semibold transition ${colorDecoracion === "otro"
+                                ? "bg-pink-500 text-white"
+                                : "bg-pink-100 hover:bg-pink-200 text-pink-700"
+                                }`}
                         >
                             ✨ Otro color
                         </button>
@@ -230,9 +298,9 @@ function ProductDetail() {
                             <div className="mt-4 p-4 bg-white rounded-xl border-2 border-pink-200 flex items-center gap-3">
                                 <div
                                     className="w-10 h-10 rounded-full border-2 border-gray-300"
-                                    style={{ backgroundColor: colorDecoracion }}
+                                    style={{ backgroundColor: colorDecoracion.codigo }}
                                 ></div>
-                                <span className="font-semibold text-gray-700">Decoración seleccionada</span>
+                                <span className="font-semibold text-gray-700">{colorDecoracion.nombre}</span>
                             </div>
                         )}
                     </div>
