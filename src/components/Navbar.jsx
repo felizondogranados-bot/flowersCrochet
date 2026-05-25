@@ -12,7 +12,7 @@ function Navbar() {
     const navigate = useNavigate()
 
     return (
-        <nav className="sticky top-0 z-50 bg-[#FBE3E3] border-b border-pink-200">
+        <nav className="sticky top-0 z-50 bg-[#fbd8e0] border-b border-pink-200">
             <div className="px-8 py-4 flex items-center justify-between">
 
                 {/* Logo */}
@@ -60,7 +60,7 @@ function Navbar() {
                                 setTimeout(() => {
 
                                     document
-                                        .getElementById("pedidos")
+                                        .getElementById("información")
                                         ?.scrollIntoView({
                                             behavior: "smooth"
                                         })
@@ -72,7 +72,7 @@ function Navbar() {
                             className="hover:text-pink-400 transition"
                         >
 
-                            Pedidos
+                            información
 
                         </button>
                     </li>
@@ -178,11 +178,11 @@ function Navbar() {
 
                         <li>
                             <a
-                                href="#pedidos"
+                                href="#información"
                                 onClick={() => setMenuAbierto(false)}
                                 className="hover:text-pink-400 transition"
                             >
-                                Pedidos
+                                información
                             </a>
                         </li>
 

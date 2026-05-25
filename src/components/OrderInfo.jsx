@@ -13,7 +13,8 @@ function OrderInfo() {
     {
       titulo: "🚚 Envíos",
       descripcion:
-        "Realizamos envíos a todo Costa Rica.",
+        "Se realizan entregas personales en tilaran, Cañas y Liberia, tambien realizamos envíos a todo Costa Rica.",
+        
     },
 
     {

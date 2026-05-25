@@ -1,3 +1,4 @@
+import { FaInstagram, FaWhatsapp } from "react-icons/fa"
 function Footer() {
   return (
 
@@ -12,7 +13,7 @@ function Footer() {
         <div>
 
           <h1 className="text-3xl font-bold text-pink-400">
-            Flowers Crochet 🌸
+            Flowers Crochet 
           </h1>
 
           <p className="text-gray-500 mt-4 leading-relaxed">
@@ -47,30 +48,32 @@ function Footer() {
             Redes Sociales
           </h2>
 
-          <div className="flex gap-4 text-3xl">
+          <div className="flex gap-5">
 
+            {/* Instagram */}
             <a
-              href="https://instagram.com/"
+              href="https://instagram.com/flowerss__crochet"
               target="_blank"
-              className="hover:scale-110 transition"
+              rel="noreferrer"
+              className="bg-pink-100 hover:bg-pink-200
+      text-pink-500 p-4 rounded-full
+      text-2xl transition duration-300
+      hover:scale-110 shadow-md"
             >
-              📸
+              <FaInstagram />
             </a>
 
+            {/* WhatsApp */}
             <a
               href="https://wa.me/50688115650"
               target="_blank"
-              className="hover:scale-110 transition"
+              rel="noreferrer"
+              className="bg-green-100 hover:bg-green-200
+      text-green-500 p-4 rounded-full
+      text-2xl transition duration-300
+      hover:scale-110 shadow-md"
             >
-              📲
-            </a>
-
-            <a
-              href="https://tiktok.com/"
-              target="_blank"
-              className="hover:scale-110 transition"
-            >
-              🎵
+              <FaWhatsapp />
             </a>
 
           </div>

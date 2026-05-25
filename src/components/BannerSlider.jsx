@@ -30,21 +30,21 @@ function BannerSlider() {
   const banners = [
 
     {
-      titulo: "Colección Sanrio 🌸",
+      titulo: "Amigurumis",
       imagen:
-        "https://i.pinimg.com/736x/0d/88/47/0d88471975efc60f38c4bcb3f62ef5dd.jpg",
+        "/flowersCrochet/imagenesgenerales/amigurumis.png",
     },
 
     {
-      titulo: "Flores Crochet 💖",
+      titulo: "Flores",
       imagen:
-        "https://i.pinimg.com/736x/63/71/39/637139dc4d6d0b3a6033e4f1f6c26e61.jpg",
+        "/flowersCrochet/imagenesgenerales/flores.png",
     },
 
     {
-      titulo: "Accesorios Cute 🎀",
+      titulo: "Llaveros",
       imagen:
-        "https://i.pinimg.com/736x/9e/14/6d/9e146d5c6815fc39e01cfe1a4f9f4fcb.jpg",
+        "/flowersCrochet/imagenesgenerales/llaveros.png",
     },
 
   ]

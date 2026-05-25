@@ -25,19 +25,19 @@ function Hero() {
     // Array de imágenes del carrusel de amigurumis
     const imagenes = [
         {
-            url: "https://i.pinimg.com/736x/84/4f/1c/844f1c1ec9f9a14a0ebc9285a5f5d2cf.jpg",
+            url: "/flowersCrochet/imagenesgenerales/conejita.png",
             alt: "Amigurumi Cute 1",
         },
         {
-            url: "https://i.pinimg.com/736x/0d/88/47/0d88471975efc60f38c4bcb3f62ef5dd.jpg",
+            url: "/flowersCrochet/imagenesgenerales/miffy.png",
             alt: "Sanrio Collection",
         },
         {
-            url: "https://i.pinimg.com/736x/9f/92/52/9f9252e68c0e57a8f46db9dc3fc57f0e.jpg",
+            url: "/flowersCrochet/imagenesgenerales/ramo.png",
             alt: "Accesorios Cute",
         },
         {
-            url: "https://i.pinimg.com/736x/9e/14/6d/9e146d5c6815fc39e01cfe1a4f9f4fcb.jpg",
+            url: "/flowersCrochet/imagenesgenerales/totuga.png",
             alt: "Accesorios Cute 2",
         },
     ]
@@ -105,18 +105,18 @@ function Hero() {
 
                     {/* Subtítulo */}
                     <p className="text-pink-500 font-semibold mb-4 text-lg">
-                        Nueva colección 🌸
+                        Flowers Crochet
                     </p>
 
                     {/* Título principal */}
                     <h1 className="text-5xl md:text-7xl font-bold text-gray-800 leading-tight">
-                        Amigurumis & Accesorios Cute
+                        Donde el crochet se vuelve magia ✨ 
                     </h1>
 
                     {/* Descripción */}
                     <p className="text-gray-600 mt-6 text-lg md:text-xl leading-relaxed">
                         Descubre flores tejidas, llaveros, accesorios y detalles
-                        personalizados hechos con mucho amor 💖
+                        personalizados hechos con mucho amor
                     </p>
 
                     {/* Botones de Acción */}
@@ -128,7 +128,7 @@ function Hero() {
                             className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-full text-lg transition text-center shadow-lg"
                         >
 
-                            Ver catálogo 🌸
+                            Ver catálogo 
 
                         </Link>
 
@@ -140,7 +140,7 @@ function Hero() {
                             className="bg-white hover:bg-pink-50 text-pink-500 border border-pink-300 px-8 py-4 rounded-full text-lg transition text-center shadow-lg"
                         >
 
-                            WhatsApp 📲
+                            WhatsApp 
 
                         </a>
 
@@ -152,17 +152,14 @@ function Hero() {
                 <div className="flex justify-center relative">
 
                     {/* Contenedor del Carrusel */}
-                    <div className="relative w-full max-w-[500px] rounded-[40px] overflow-hidden shadow-2xl bg-gray-100 h-[500px]">
+                    <div className="relative w-full max-w-[500px] h-[600px] flex items-center justify-center">
 
                         {/* Imagen actual del carrusel con transición suave */}
                         <img
                             src={imagenes[indexActual].url}
                             alt={imagenes[indexActual].alt}
-                            className="w-full h-full object-cover transition-opacity duration-700"
+                            className="max-w-full max-h-full object-contain transition-all duration-700"
                         />
-
-                        {/* Overlay oscuro opcional */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
 
                         {/* Botón Anterior - Navegar a imagen anterior */}
                         <button
@@ -212,11 +209,10 @@ function Hero() {
                                 <button
                                     key={index}
                                     onClick={() => setIndexActual(index)}
-                                    className={`rounded-full transition-all duration-300 ${
-                                        index === indexActual
+                                    className={`rounded-full transition-all duration-300 ${index === indexActual
                                             ? "bg-white w-8 h-2"
                                             : "bg-white/50 w-2 h-2 hover:bg-white/75"
-                                    }`}
+                                        }`}
                                     aria-label={`Ir a imagen ${index + 1}`}
                                 />
                             ))}

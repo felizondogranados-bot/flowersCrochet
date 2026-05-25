@@ -92,7 +92,7 @@ function ProductCard({ producto }) {
                         className="w-full bg-pink-100 hover:bg-pink-200 text-pink-600 py-3 rounded-full text-center font-medium transition block"
                     >
 
-                        Ver producto 🌸
+                        Ver producto 
 
                     </Link>
 

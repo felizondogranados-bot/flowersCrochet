@@ -26,30 +26,30 @@ function Categories() {
   const categorias = [
 
     {
-      nombre: "Flores 🌷",
+      nombre: "Flores",
       imagen:
-        "https://i.pinimg.com/736x/f5/73/9e/f5739ebf5f85c2f6f7dca4b72b0f43d5.jpg",
+        "/flowersCrochet/imagenesgenerales/flor.png",
       ruta: "/catalogo?categoria=Flores",
     },
 
     {
-      nombre: "Llaveros 🧸",
+      nombre: "Llaveros",
       imagen:
-        "https://i.pinimg.com/736x/59/9b/7c/599b7c0d59b28ec8a6d2d4b21dcac8f4.jpg",
+        "/flowersCrochet/imagenesgenerales/llaveroparejas.png",
       ruta: "/catalogo?categoria=Llaveros",
     },
 
     {
-      nombre: "Amigurumis 🧶",
+      nombre: "Amigurumis",
       imagen:
-        "https://i.pinimg.com/736x/84/4f/1c/844f1c1ec9f9a14a0ebc9285a5f5d2cf.jpg",
+        "/flowersCrochet/imagenesgenerales/cristiano.png",
       ruta: "/catalogo?categoria=Amigurumis",
     },
 
     {
-      nombre: "Accesorios 🎀",
+      nombre: "Accesorios",
       imagen:
-        "https://i.pinimg.com/736x/9f/92/52/9f9252e68c0e57a8f46db9dc3fc57f0e.jpg",
+        "/flowersCrochet/imagenesgenerales/accesorioperro.png",
       ruta: "/catalogo?categoria=Accesorios",
     },
 
@@ -61,7 +61,7 @@ function Categories() {
 
       {/* Encabezado de categorías */}
       <h1 className="text-4xl font-bold text-gray-800 mb-12">
-        Categorías 🌸
+        ✨Categorías Destacadas✨
       </h1>
 
       {/* Grid responsivo: 2 columnas en móvil, 4 en desktop */}
