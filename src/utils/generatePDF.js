@@ -128,7 +128,7 @@ export const generarPDFPedido = async (cart, datos, total) => {
                 <p style="margin: 5px 0;"><strong>Adelanto requerido (50%):</strong> <span style="color: #ec4899; font-size: 16px;">₡${adelanto.toLocaleString()}</span></p>
                 <p style="margin: 5px 0;"><strong>Saldo a la entrega:</strong> <span style="color: #ec4899; font-size: 16px;">₡${(total - adelanto).toLocaleString()}</span></p>
                 <p style="margin: 15px 0 0 0; color: #666; font-size: 12px;">
-                    💳 SINPE Móvil: <strong>6862 8115 650</strong><br>
+                    💳 SINPE Móvil: <strong>88115650</strong> a nombre de <strong>Francela Elizondo</strong><br>
                     ⏳ Tiempo de entrega: 3 a 7 días hábiles
                 </p>
             </div>
@@ -136,6 +136,9 @@ export const generarPDFPedido = async (cart, datos, total) => {
             <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid #fce7f3;">
                 <p style="color: #ec4899; font-size: 14px; margin: 0;">
                     💖 ¡Gracias por tu pedido! Nos encanta trabajar para ti 🌸
+                </p>
+                <p style="color: #ec4899; background-color: #fce7f3; padding: 10px; border-radius: 5px; font-size: 13px; font-weight: bold; margin: 10px 0 0 0;">
+                    📲 ENVÍA ESTE PDF POR WHATSAPP PARA CONFIRMAR TU PEDIDO
                 </p>
                 <p style="color: #999; font-size: 12px; margin: 5px 0 0 0;">
                     Flowers Crochet | Tel: +506 8811 5650 | WhatsApp: 6862 8115 650

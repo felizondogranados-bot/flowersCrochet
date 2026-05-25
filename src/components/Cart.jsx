@@ -87,6 +87,7 @@ function Cart() {
     /**
      * Genera PDF y luego abre WhatsApp
      * El PDF contiene resumen de pedido con imágenes y datos del cliente
+     * El usuario debe adjuntar el PDF descargado al mensaje de WhatsApp
      * @async
      * @function
      */
@@ -117,25 +118,29 @@ function Cart() {
             )
 
             if (pdfGenerado) {
-                // Abrir WhatsApp con mensaje informativo
+                // Abrir WhatsApp con instrucciones claras para adjuntar el PDF
                 const mensaje = encodeURIComponent(
-                    `🌸 ¡Hola! Envío mi pedido de Flowers Crochet.\n\n` +
-                    `👤 Cliente: ${nombreCliente}\n` +
+                    `🌸 *CONFIRMACIÓN DE PEDIDO - FLOWERS CROCHET*\n\n` +
+                    `👤 Nombre: ${nombreCliente}\n` +
                     `📅 Fecha de entrega: ${fechaEntrega}\n` +
-                    `📦 Productos: ${cart.length}\n` +
-                    `💰 Total: ₡${calcularTotal().toLocaleString()}\n\n` +
-                    `📎 El PDF detallado se descargó automáticamente a mi dispositivo.\n\n` +
-                    `Gracias 💖`
+                    `📦 Total de productos: ${cart.length}\n` +
+                    `💰 Monto total: ₡${calcularTotal().toLocaleString()}\n\n` +
+                    `📎 *Por favor adjunta el PDF que se descargó* para confirmar los detalles de tu pedido.\n\n` +
+                    `💳 Datos para SINPE Móvil:\n` +
+                    `📱 88115650 (Francela Elizondo)\n\n` +
+                    `Gracias por tu confianza 💖`
                 )
 
                 const url = `https://wa.me/50688115650?text=${mensaje}`
                 setTimeout(() => {
                     window.open(url, "_blank")
-                }, 1000)
+                }, 500)
 
-                // Mostrar confirmación
+                // Mostrar instrucción clara
                 alert("✅ PDF generado y descargado exitosamente!\n\n" +
-                    "Se abrirá WhatsApp para que confirmes tu pedido.")
+                    "📎 IMPORTANTE: Se abrirá WhatsApp.\n" +
+                    "Adjunta el PDF que se descargó a tu dispositivo para confirmar tu pedido.\n\n" +
+                    "El PDF contiene toda la información de tu pedido con detalles, colores e imágenes.")
             } else {
                 alert("❌ Error al generar el PDF. Intenta de nuevo.")
             }
