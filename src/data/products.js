@@ -1,3 +1,34 @@
+/**
+ * products.js - Base de Datos de Productos
+ * ========================================
+ * Array central de todos los productos disponibles en la tienda.
+ * 
+ * ESTRUCTURA DE PRODUCTO:
+ * {
+ *   id: number (ID único),
+ *   nombre: string (Nombre del producto),
+ *   precio: number (Precio en colones),
+ *   categoria: string (Flores, Ramos, Llaveros, Amigurumis, Accesorios),
+ *   descripcion?: string (Descripción opcional),
+ *   colores?: array (Opciones de color disponibles),
+ *   personalizable?: boolean (Si se puede personalizar),
+ *   subirImagen?: boolean (Si permite subir imagen personalizada),
+ *   imagen: string (Ruta de imagen - debe estar en /public/products/)
+ * }
+ * 
+ * IMÁGENES REQUERIDAS EN /public/products/:
+ * - Rosas.jpg, Girasol.jpg, Calas.jpg, Lirios.jpg, Claveles.jpg
+ * - Margaritas.jpg, Tulipan1.jpg, Tulipan2.jpg, Lavanda.jpg
+ * - FlorRapunzel.jpg, FlorRapunzellPascal.jpg, Guaria.jpg
+ * - TulipanAmor.jpg, TulipanCorazon.jpg, RosaCombinada.jpg
+ * - Corazon.jpg, FlorCorazon.jpg, TulipanGrande.jpg
+ * - RamoAraña.jpg, ElRamodelaNoche.jpg, RamoAbejita.jpg
+ * - RamoChanchito.jpg, RamoAmorEterno.jpg, RamoAlegria.jpg
+ * - amigurumi.jpg
+ * 
+ * @type {Array}
+ */
+
 const productos = [
 
  {

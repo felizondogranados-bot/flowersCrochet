@@ -1,8 +1,32 @@
+/**
+ * Cart Component
+ * ==============
+ * Componente principal del carrito de compras. Permite visualizar los productos
+ * agregados, gestionar cantidades, y completar el formulario de pedido.
+ * 
+ * FUNCIONALIDADES:
+ * - Mostrar resumen de productos con imágenes
+ * - Calcular totales y subtotales
+ * - Validar formulario de pedido
+ * - Enviar pedido a WhatsApp con detalles completos
+ * - Soportar dos tipos de entrega: Personal y por Correos
+ * 
+ * IMÁGENES REQUERIDAS:
+ * - Imágenes de productos individuales en /public/products/
+ * 
+ * @component
+ * @returns {JSX.Element} Página completa del carrito
+ */
+
 import { useContext, useState } from "react"
 import { CartContext } from "../context/CartContext"
 
+/**
+ * Componente Cart
+ * Gestiona la visualización y procesamiento del carrito de compras
+ */
 function Cart() {
-
+    // Contexto del carrito - proporciona cart y removeFromCart
     const { cart, removeFromCart } = useContext(CartContext)
 
     const [nombreCliente, setNombreCliente] = useState("")
@@ -17,6 +41,11 @@ function Cart() {
     const [distrito, setDistrito] = useState("")
     const [direccionExacta, setDireccionExacta] = useState("")
 
+    /**
+     * Calcula el total del carrito
+     * Suma todos los productos multiplicando precio x cantidad
+     * @returns {number} Total del carrito
+     */
     const calcularTotal = () => {
         return cart.reduce((total, item) => {
             return total + (item.precio * item.cantidad)
@@ -26,6 +55,10 @@ function Cart() {
     const lugaresEntrega = ["Tilarán", "Cañas", "Liberia"]
     const provincias = ["San José", "Alajuela", "Cartago", "Heredia", "Guanacaste", "Puntarenas", "Limón"]
 
+    /**
+     * Valida que todos los campos del formulario estén completos
+     * @returns {boolean} true si el formulario es válido, false de lo contrario
+     */
     const validarFormulario = () => {
         if (!nombreCliente.trim()) {
             alert("Por favor ingresa tu nombre")
@@ -48,6 +81,12 @@ function Cart() {
         return true
     }
 
+    /**
+     * Construye un mensaje formateado y lo envía por WhatsApp
+     * Incluye información del cliente, productos, y detalles de pago
+     * Valida el formulario antes de enviar
+     * @function
+     */
     const enviarWhatsApp = () => {
         if (!validarFormulario()) return
 
@@ -145,40 +184,57 @@ function Cart() {
 
                                     <div className="space-y-4 max-h-96 overflow-y-auto">
                                         {cart.map((item) => (
-                                            <div key={item.cartId} className="border-b border-gray-200 pb-4">
+                                            <div key={item.cartId} className="border-b border-gray-200 pb-4 grid grid-cols-3 gap-3 items-start">
 
-                                                <div className="flex justify-between items-start mb-2">
-                                                    <div className="flex-1">
-                                                        <h3 className="font-bold text-gray-800">
-                                                            {item.nombre}
-                                                        </h3>
-                                                        <p className="text-sm text-gray-500">
-                                                            Cantidad: {item.cantidad}
-                                                        </p>
-                                                    </div>
-                                                    <button
-                                                        onClick={() => removeFromCart(item.cartId)}
-                                                        className="text-red-500 hover:text-red-700 font-bold text-lg"
-                                                    >
-                                                        ✕
-                                                    </button>
+                                                {/* Imagen del producto - IMAGEN REQUERIDA */}
+                                                <div className="col-span-1">
+                                                    <img
+                                                        src={item.imagen}
+                                                        alt={item.nombre}
+                                                        className="w-full h-20 object-cover rounded-lg shadow-md"
+                                                        onError={(e) => {
+                                                            e.target.src = "https://via.placeholder.com/80?text=Producto"
+                                                        }}
+                                                    />
                                                 </div>
 
-                                                {item.colorFlor && (
-                                                    <p className="text-xs text-gray-600 mb-1">
-                                                        🌸 Color: {item.colorFlor}
-                                                    </p>
-                                                )}
+                                                {/* Información del producto */}
+                                                <div className="col-span-2">
 
-                                                {item.colorDecoracion && (
-                                                    <p className="text-xs text-gray-600 mb-1">
-                                                        🎀 Decoración: {item.colorDecoracion}
-                                                    </p>
-                                                )}
+                                                    <div className="flex justify-between items-start mb-2">
+                                                        <div className="flex-1">
+                                                            <h3 className="font-bold text-gray-800 text-sm">
+                                                                {item.nombre}
+                                                            </h3>
+                                                            <p className="text-xs text-gray-500">
+                                                                Cantidad: {item.cantidad}
+                                                            </p>
+                                                        </div>
+                                                        <button
+                                                            onClick={() => removeFromCart(item.cartId)}
+                                                            className="text-red-500 hover:text-red-700 font-bold text-lg ml-2"
+                                                        >
+                                                            ✕
+                                                        </button>
+                                                    </div>
 
-                                                <p className="font-bold text-pink-500">
-                                                    ₡{(item.precio * item.cantidad).toLocaleString()}
-                                                </p>
+                                                    {item.colorFlor && (
+                                                        <p className="text-xs text-gray-600 mb-1">
+                                                            🌸 Color: {item.colorFlor}
+                                                        </p>
+                                                    )}
+
+                                                    {item.colorDecoracion && (
+                                                        <p className="text-xs text-gray-600 mb-1">
+                                                            🎀 Decoración: {item.colorDecoracion}
+                                                        </p>
+                                                    )}
+
+                                                    <p className="font-bold text-pink-500 text-sm">
+                                                        ₡{(item.precio * item.cantidad).toLocaleString()}
+                                                    </p>
+
+                                                </div>
 
                                             </div>
                                         ))}
