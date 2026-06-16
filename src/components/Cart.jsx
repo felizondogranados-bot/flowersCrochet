@@ -1,21 +1,11 @@
 /**
- * Cart Component
- * ==============
- * Componente principal del carrito de compras. Permite visualizar los productos
- * agregados, gestionar cantidades, y completar el formulario de pedido.
- * 
- * FUNCIONALIDADES:
- * - Mostrar resumen de productos con imágenes
- * - Calcular totales y subtotales
- * - Validar formulario de pedido
- * - Enviar pedido a WhatsApp con detalles completos
- * - Soportar dos tipos de entrega: Personal y por Correos
- * 
- * IMÁGENES REQUERIDAS:
- * - Imágenes de productos individuales en /public/products/
- * 
- * @component
- * @returns {JSX.Element} Página completa del carrito
+ * Temas demostrados en este archivo:
+ * ===================================
+ * - React: useState, useContext, Renderizado Condicional, Renderizado Dinámico
+ * - Eventos: onSubmit, onClick, onChange
+ * - JS Avanzado: reduce() (cálculo de acumuladores), funciones asíncronas reutilizables
+ * - JS Moderno: let/const, template literals, destructuring, spread operator, arrow functions, filter
+ * - Responsive Design y Layouts (Flexbox, CSS Grid)
  */
 
 import { useContext, useState } from "react"
@@ -23,15 +13,47 @@ import { CartContext } from "../context/CartContext"
 import { generarPDFPedido } from "../utils/generatePDF"
 
 /**
+ * RESPONSABILIDAD DE LA CARPETA (src/components):
+ * ===============================================
+ * Esta carpeta contiene componentes reutilizables de la interfaz de usuario.
+ * Son piezas de interfaz modulares que reciben datos por Props o acceden al
+ * estado global por Context, encargadas de renderizar la vista y capturar
+ * interacciones del usuario mediante eventos de DOM.
+ */
+
+/**
+ * Calcula la fecha mínima de entrega (3 días hábiles a partir de hoy)
+ * @returns {string} Fecha en formato YYYY-MM-DD
+ */
+const getMinimumDeliveryDate = () => {
+    const date = new Date()
+    let addedDays = 0
+    while (addedDays < 3) {
+        date.setDate(date.getDate() + 1)
+        const dayOfWeek = date.getDay()
+        if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+            addedDays++
+        }
+    }
+    const yyyy = date.getFullYear()
+    const mm = String(date.getMonth() + 1).padStart(2, "0")
+    const dd = String(date.getDate()).padStart(2, "0")
+    return `${yyyy}-${mm}-${dd}`
+}
+
+/**
  * Componente Cart
- * Gestiona la visualización y procesamiento del carrito de compras
+ * Gestiona la visualización del carrito, cantidades, cálculo de totales y datos de facturación.
  */
 function Cart() {
+    const minimumDeliveryDate = getMinimumDeliveryDate()
     // Estado para mostrar spinner durante generación de PDF
     const [generandoPDF, setGenerandoPDF] = useState(false)
-    // Contexto del carrito - proporciona cart y removeFromCart
+    
+    // [React: useContext] Consumimos el contexto global del carrito de compras
     const { cart, removeFromCart } = useContext(CartContext)
 
+    // [React: useState] Estados locales para la información del cliente
     const [nombreCliente, setNombreCliente] = useState("")
     const [fechaEntrega, setFechaEntrega] = useState("")
     const [tipoEntrega, setTipoEntrega] = useState("personal")
@@ -46,13 +68,14 @@ function Cart() {
 
     /**
      * Calcula el total del carrito
-     * Suma todos los productos multiplicando precio x cantidad
+     * [JS Avanzado / Moderno: reduce()] Recorre el carrito sumando acumulativamente precio x cantidad
+     * 
      * @returns {number} Total del carrito
      */
     const calcularTotal = () => {
         return cart.reduce((total, item) => {
             return total + (item.precio * item.cantidad)
-        }, 0)
+        }, 0) // El valor inicial de acumulación es 0
     }
 
     const lugaresEntrega = ["Tilarán", "Cañas", "Liberia"]
@@ -71,6 +94,13 @@ function Cart() {
             alert("Por favor selecciona una fecha de entrega")
             return false
         }
+        
+        // Validación de fecha mínima (3 días hábiles)
+        const minDate = getMinimumDeliveryDate()
+        if (fechaEntrega < minDate) {
+            alert(`🌸 Los pedidos requieren un tiempo de preparación de al menos 3 días hábiles. Por favor selecciona una fecha a partir del: ${minDate}.`)
+            return false
+        }
         if (tipoEntrega === "personal" && !lugarEntrega) {
             alert("Por favor selecciona un lugar de entrega personal")
             return false
@@ -86,10 +116,7 @@ function Cart() {
 
     /**
      * Genera PDF y luego abre WhatsApp
-     * El PDF contiene resumen de pedido con imágenes y datos del cliente
-     * El usuario debe adjuntar el PDF descargado al mensaje de WhatsApp
-     * @async
-     * @function
+     * [JS Avanzado: Función asíncrona reutilizable]
      */
     const generarPDFYEnviar = async () => {
         if (!validarFormulario()) return
@@ -97,7 +124,7 @@ function Cart() {
         setGenerandoPDF(true)
 
         try {
-            // Preparar datos del cliente
+            // Preparar datos del cliente usando notación shorthand de objetos de ES6
             const datosCliente = {
                 nombreCliente,
                 fechaEntrega,
@@ -110,7 +137,7 @@ function Cart() {
                 direccionExacta: tipoEntrega === "correo" ? direccionExacta : null,
             }
 
-            // Generar PDF
+            // Generar PDF de forma asíncrona
             const pdfGenerado = await generarPDFPedido(
                 cart,
                 datosCliente,
@@ -118,7 +145,7 @@ function Cart() {
             )
 
             if (pdfGenerado) {
-                // Abrir WhatsApp con instrucciones claras para adjuntar el PDF
+                // [JS Moderno: Template Literals] Crea el mensaje de confirmación formateado
                 const mensaje = encodeURIComponent(
                     `🌸 *CONFIRMACIÓN DE PEDIDO - FLOWERS CROCHET*\n\n` +
                     `👤 Nombre: ${nombreCliente}\n` +
@@ -136,7 +163,6 @@ function Cart() {
                     window.open(url, "_blank")
                 }, 500)
 
-                // Mostrar instrucción clara
                 alert("✅ PDF generado y descargado exitosamente!\n\n" +
                     "📎 IMPORTANTE: Se abrirá WhatsApp.\n" +
                     "Adjunta el PDF que se descargó a tu dispositivo para confirmar tu pedido.\n\n" +
@@ -152,129 +178,52 @@ function Cart() {
         }
     }
 
-    /**
-     * Construye un mensaje formateado y lo envía por WhatsApp
-     * Incluye información del cliente, productos, y detalles de pago
-     * Valida el formulario antes de enviar
-     * @function
-     * @deprecated Usar generarPDFYEnviar en su lugar
-     */
-    const enviarWhatsApp = () => {
-        if (!validarFormulario()) return
-
-        let mensaje = `🌸 *NUEVO PEDIDO - FLOWERS CROCHET* 🌸%0A%0A`
-
-        mensaje += `*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*%0A`
-        mensaje += `*INFORMACIÓN DEL CLIENTE*%0A`
-        mensaje += `*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*%0A%0A`
-
-        mensaje += `👤 *Nombre:* ${nombreCliente}%0A`
-        mensaje += `📅 *Fecha de entrega:* ${fechaEntrega}%0A`
-
-        if (tipoEntrega === "personal") {
-            mensaje += `📍 *Tipo de entrega:* Entrega Personal%0A`
-            mensaje += `🏘️ *Lugar:* ${lugarEntrega}%0A%0A`
-        } else {
-            mensaje += `📍 *Tipo de entrega:* Envío por Correos de Costa Rica%0A`
-            mensaje += `📱 *Teléfono:* ${telefonoCliente}%0A`
-            mensaje += `🗺️ *Provincia:* ${provincia}%0A`
-            mensaje += `📌 *Cantón:* ${canton}%0A`
-            mensaje += `🏛️ *Distrito:* ${distrito}%0A`
-            mensaje += `🏠 *Dirección:* ${direccionExacta}%0A%0A`
-        }
-
-        mensaje += `*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*%0A`
-        mensaje += `*DETALLES DE PRODUCTOS*%0A`
-        mensaje += `*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*%0A%0A`
-
-        cart.forEach((item, index) => {
-
-            mensaje += `*${index + 1}. ${item.nombre}*%0A`
-            mensaje += `💰 Precio unitario: ₡${item.precio.toLocaleString()}%0A`
-            mensaje += `📦 Cantidad: ${item.cantidad}%0A`
-
-            if (item.colorFlor) {
-                mensaje += `🌸 Color: ${item.colorFlor.nombre}%0A`
-            }
-
-            if (item.colorDecoracion) {
-                mensaje += `🎀 Decoración: ${item.colorDecoracion.nombre}%0A`
-            }
-
-            if (item.descripcionCliente) {
-                mensaje += `📝 Detalles especiales: ${item.descripcionCliente}%0A`
-            }
-
-            mensaje += `💵 Subtotal: ₡${(item.precio * item.cantidad).toLocaleString()}%0A%0A`
-
-        })
-
-        const total = calcularTotal()
-        const adelanto = Math.ceil(total * 0.5)
-
-        mensaje += `*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*%0A`
-        mensaje += `💳 *RESUMEN DE PAGO*%0A`
-        mensaje += `*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*%0A%0A`
-        mensaje += `💰 *Total a pagar:* ₡${total.toLocaleString()}%0A`
-        mensaje += `⏳ *Adelanto requerido (50%):* ₡${adelanto.toLocaleString()}%0A`
-        mensaje += `*Saldo a la entrega:* ₡${(total - adelanto).toLocaleString()}%0A%0A`
-
-        mensaje += `*Puedes transferir el adelanto por SINPE móvil al: 6862 8115 650*%0A`
-        mensaje += `💖 *Gracias por tu pedido! Nos encanta trabajar para ti 🌸*`
-
-        const url = `https://wa.me/50688115650?text=${mensaje}`
-        window.open(url, "_blank")
-    }
-
     return (
-        <section className="px-4 md:px-8 py-20 bg-pink-50 min-h-screen">
+        <section className="px-4 md:px-8 py-20 bg-pink-50 min-h-screen transition duration-300">
             <div className="max-w-7xl mx-auto">
 
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-12">
                     Completa tu pedido 🛒
                 </h1>
 
+                {/* [React: Renderizado Condicional] Si el carrito está vacío, muestra aviso; de lo contrario, el layout de pedido */}
                 {cart.length === 0 ? (
-                    <div className="bg-white rounded-3xl p-12 text-center shadow-lg">
+                    <div className="bg-white rounded-3xl p-12 text-center shadow-lg border border-pink-100">
                         <p className="text-gray-500 text-xl mb-6">No hay productos agregados 💔</p>
-                        <a href="/flowersCrochet/catalogo" className="inline-block bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded-2xl font-bold transition">
+                        <a href="/flowersCrochet/catalogo" className="inline-block bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded-2xl font-bold transition duration-300">
                             Ir al catálogo 🌸
                         </a>
                     </div>
                 ) : (
+                    /* [Layout: CSS Grid] Divide la pantalla en 3 columnas: 1 para resumen, 2 para formulario de datos */
                     <div className="grid md:grid-cols-3 gap-8">
 
-                        {/* ===== LADO IZQUIERDO: PRODUCTOS Y TOTAL ===== */}
+                        {/* ===== LADO IZQUIERDO: RESUMEN DE PRODUCTOS (1 Columna) ===== */}
                         <div className="md:col-span-1">
-
                             <div className="sticky top-24 space-y-6">
-
-                                {/* PRODUCTOS */}
-                                <div className="bg-white rounded-3xl shadow-lg p-6 space-y-4">
-
+                                <div className="bg-white rounded-3xl shadow-lg p-6 border border-pink-100 space-y-4">
                                     <h2 className="text-2xl font-bold text-gray-800 mb-6">
                                         Resumen de pedido
                                     </h2>
 
                                     <div className="space-y-4 max-h-96 overflow-y-auto">
+                                        {/* [React: Renderizado Dinámico] Iteración mapeando los productos del carrito */}
                                         {cart.map((item) => (
                                             <div key={item.cartId} className="border-b border-gray-200 pb-4 grid grid-cols-3 gap-3 items-start">
-
-                                                {/* Imagen del producto - IMAGEN REQUERIDA */}
+                                                {/* Imagen */}
                                                 <div className="col-span-1">
                                                     <img
                                                         src={item.imagen}
                                                         alt={item.nombre}
-                                                        className="w-full h-20 object-cover rounded-lg shadow-md"
+                                                        className="w-full h-20 object-cover rounded-lg shadow-md border border-pink-50"
                                                         onError={(e) => {
                                                             e.target.src = "https://via.placeholder.com/80?text=Producto"
                                                         }}
                                                     />
                                                 </div>
 
-                                                {/* Información del producto */}
+                                                {/* Información de Producto */}
                                                 <div className="col-span-2">
-
                                                     <div className="flex justify-between items-start mb-2">
                                                         <div className="flex-1">
                                                             <h3 className="font-bold text-gray-800 text-sm">
@@ -285,8 +234,10 @@ function Cart() {
                                                             </p>
                                                         </div>
                                                         <button
+                                                            // [DOM/Eventos: onClick] Elimina la personalización específica del carrito
                                                             onClick={() => removeFromCart(item.cartId)}
-                                                            className="text-red-500 hover:text-red-700 font-bold text-lg ml-2"
+                                                            className="text-red-500 hover:text-red-700 font-bold text-lg ml-2 cursor-pointer"
+                                                            title="Eliminar del carrito"
                                                         >
                                                             ✕
                                                         </button>
@@ -294,66 +245,46 @@ function Cart() {
 
                                                     {item.colorFlor && (
                                                         <div className="flex items-center gap-2 mb-1">
-
-                                                            <span className="text-xs text-gray-600">
-                                                                🌸 Color:
-                                                            </span>
-
+                                                            <span className="text-xs text-gray-600">🌸 Flor:</span>
                                                             <div
                                                                 className="w-4 h-4 rounded-full border border-gray-300 shadow-sm"
-                                                                style={{
-                                                                    backgroundColor: item.colorFlor.codigo
-                                                                }}
+                                                                style={{ backgroundColor: item.colorFlor.codigo }}
                                                             ></div>
-
-                                                            <span className="text-xs text-gray-500">
-                                                                {item.colorFlor.nombre}
-                                                            </span>
-
+                                                            <span className="text-xs text-gray-500">{item.colorFlor.nombre}</span>
                                                         </div>
                                                     )}
 
                                                     {item.colorDecoracion && (
                                                         <div className="flex items-center gap-2 mb-1">
-
-                                                            <span className="text-xs text-gray-600">
-                                                                🎀 Decoración:
-                                                            </span>
-
+                                                            <span className="text-xs text-gray-600">🎀 Decoración:</span>
                                                             <div
                                                                 className="w-4 h-4 rounded-full border border-gray-300 shadow-sm"
-                                                                style={{
-                                                                    backgroundColor: item.colorDecoracion.codigo
-                                                                }}
+                                                                style={{ backgroundColor: item.colorDecoracion.codigo }}
                                                             ></div>
-
-                                                            <span className="text-xs text-gray-500">
-                                                                {item.colorDecoracion.nombre}
-                                                            </span>
-
+                                                            <span className="text-xs text-gray-500">{item.colorDecoracion.nombre}</span>
                                                         </div>
                                                     )}
 
-                                                    <p className="font-bold text-pink-500 text-sm">
-                                                        ₡{(item.precio * item.cantidad).toLocaleString()}
+                                                    <p className="font-bold text-pink-500 text-sm mt-1">
+                                                        Subtotal: ₡{(item.precio * item.cantidad).toLocaleString()}
                                                     </p>
-
                                                 </div>
-
                                             </div>
                                         ))}
                                     </div>
 
-                                    <div className="border-t-2 border-pink-300 pt-4 mt-4">
-
-                                        <div className="flex justify-between items-center mb-3">
+                                    <div className="border-t-2 border-pink-300 pt-4 mt-4 space-y-3">
+                                        <div className="flex justify-between items-center text-sm md:text-base">
                                             <span className="text-gray-700">Cantidad de productos:</span>
-                                            <span className="font-bold text-lg">{cart.length}</span>
+                                            <span className="font-bold text-gray-800">{cart.length}</span>
                                         </div>
 
-                                        <div className="flex justify-between items-center mb-3">
+                                        <div className="flex justify-between items-center text-sm md:text-base">
                                             <span className="text-gray-700">Total de items:</span>
-                                            <span className="font-bold text-lg">{cart.reduce((sum, item) => sum + item.cantidad, 0)}</span>
+                                            {/* [JS Avanzado: reduce()] Suma el acumulado de cantidades en el carrito */}
+                                            <span className="font-bold text-gray-800">
+                                                {cart.reduce((sum, item) => sum + item.cantidad, 0)}
+                                            </span>
                                         </div>
 
                                         <div className="flex justify-between items-center bg-gradient-to-r from-pink-100 to-pink-50 p-4 rounded-2xl">
@@ -362,25 +293,26 @@ function Cart() {
                                                 ₡{calcularTotal().toLocaleString()}
                                             </span>
                                         </div>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
 
-                        {/* ===== LADO DERECHO: INFORMACIÓN DEL PEDIDO ===== */}
+                        {/* ===== LADO DERECHO: FORMULARIO DE DETALLES DEL PEDIDO (2 Columnas) ===== */}
                         <div className="md:col-span-2">
-
-                            <div className="bg-white rounded-3xl shadow-lg p-8 space-y-8">
-
+                            {/* [DOM/Eventos: onSubmit] Formulario nativo con control preventDefault para procesar el pedido */}
+                            <form 
+                                onSubmit={(e) => {
+                                    e.preventDefault(); // Detiene el refresco nativo del navegador
+                                    generarPDFYEnviar();
+                                }} 
+                                className="bg-white rounded-3xl shadow-lg p-8 border border-pink-100 space-y-8"
+                            >
                                 <h2 className="text-3xl font-bold text-gray-800">
                                     Información del pedido
                                 </h2>
 
-                                {/* NOMBRE DEL CLIENTE */}
+                                {/* NOMBRE CLIENTE */}
                                 <div>
                                     <label className="block font-bold text-lg text-gray-700 mb-3">
                                         👤 Tu nombre
@@ -388,9 +320,11 @@ function Cart() {
                                     <input
                                         type="text"
                                         placeholder="Ej: Juan García"
+                                        required
                                         value={nombreCliente}
+                                        // [DOM/Eventos: onChange] Actualiza el estado al escribir
                                         onChange={(e) => setNombreCliente(e.target.value)}
-                                        className="w-full border-2 border-pink-300 rounded-2xl p-4 outline-none focus:border-pink-500 transition text-lg"
+                                        className="w-full border-2 border-pink-300 bg-white rounded-2xl p-4 outline-none focus:border-pink-500 transition text-lg"
                                     />
                                 </div>
 
@@ -401,10 +335,16 @@ function Cart() {
                                     </label>
                                     <input
                                         type="date"
+                                        required
+                                        min={minimumDeliveryDate}
                                         value={fechaEntrega}
+                                        // [DOM/Eventos: onChange] Actualiza el estado al seleccionar fecha
                                         onChange={(e) => setFechaEntrega(e.target.value)}
-                                        className="w-full border-2 border-pink-300 rounded-2xl p-4 outline-none focus:border-pink-500 transition text-lg"
+                                        className="w-full border-2 border-pink-300 bg-white rounded-2xl p-4 outline-none focus:border-pink-500 transition text-lg"
                                     />
+                                    <p className="text-sm text-gray-500 mt-2">
+                                        ✨ Las fechas disponibles consideran el tiempo de elaboración artesanal de cada producto (mínimo 3 días hábiles).
+                                    </p>
                                 </div>
 
                                 {/* TIPO DE ENTREGA */}
@@ -414,22 +354,26 @@ function Cart() {
                                     </label>
 
                                     <div className="space-y-3">
-
                                         {/* Opción Entrega Personal */}
-                                        <label className="flex items-center p-4 border-2 border-pink-300 rounded-2xl cursor-pointer hover:bg-pink-50 transition" style={{ borderColor: tipoEntrega === "personal" ? "#ec4899" : "#fce7f3" }}>
+                                        <label 
+                                            className="flex items-center p-4 border-2 rounded-2xl cursor-pointer hover:bg-pink-50 transition" 
+                                            style={{ borderColor: tipoEntrega === "personal" ? "#ec4899" : "#fce7f3" }}
+                                        >
                                             <input
                                                 type="radio"
                                                 value="personal"
                                                 checked={tipoEntrega === "personal"}
+                                                // [DOM/Eventos: onChange] Actualiza tipo de entrega activa
                                                 onChange={(e) => setTipoEntrega(e.target.value)}
-                                                className="w-5 h-5 cursor-pointer"
+                                                className="w-5 h-5 cursor-pointer accent-pink-500"
                                             />
                                             <span className="ml-3 font-semibold text-gray-700">Entrega Personal</span>
                                         </label>
 
-                                        {/* Lugares de entrega personal */}
+                                        {/* Detalle lugares entrega personal */}
                                         {tipoEntrega === "personal" && (
                                             <div className="ml-4 space-y-2">
+                                                {/* [React: Renderizado Dinámico] Mapea la lista estática de lugares de retiro */}
                                                 {lugaresEntrega.map((lugar) => (
                                                     <label key={lugar} className="flex items-center p-3 bg-pink-50 rounded-xl cursor-pointer hover:bg-pink-100 transition">
                                                         <input
@@ -437,7 +381,7 @@ function Cart() {
                                                             value={lugar}
                                                             checked={lugarEntrega === lugar}
                                                             onChange={(e) => setLugarEntrega(e.target.value)}
-                                                            className="w-4 h-4 cursor-pointer"
+                                                            className="w-4 h-4 cursor-pointer accent-pink-500"
                                                         />
                                                         <span className="ml-3 font-medium text-gray-700">📍 {lugar}</span>
                                                     </label>
@@ -446,21 +390,23 @@ function Cart() {
                                         )}
 
                                         {/* Opción Envío por Correos */}
-                                        <label className="flex items-center p-4 border-2 border-pink-300 rounded-2xl cursor-pointer hover:bg-pink-50 transition" style={{ borderColor: tipoEntrega === "correo" ? "#ec4899" : "#fce7f3" }}>
+                                        <label 
+                                            className="flex items-center p-4 border-2 rounded-2xl cursor-pointer hover:bg-pink-50 transition" 
+                                            style={{ borderColor: tipoEntrega === "correo" ? "#ec4899" : "#fce7f3" }}
+                                        >
                                             <input
                                                 type="radio"
                                                 value="correo"
                                                 checked={tipoEntrega === "correo"}
                                                 onChange={(e) => setTipoEntrega(e.target.value)}
-                                                className="w-5 h-5 cursor-pointer"
+                                                className="w-5 h-5 cursor-pointer accent-pink-500"
                                             />
                                             <span className="ml-3 font-semibold text-gray-700">Envío por Correos de Costa Rica</span>
                                         </label>
 
-                                        {/* Formulario de envío por correos */}
+                                        {/* Formulario envío por Correos de CR */}
                                         {tipoEntrega === "correo" && (
                                             <div className="ml-4 bg-pink-50 rounded-2xl p-6 space-y-4">
-
                                                 <div>
                                                     <label className="block font-semibold text-gray-700 mb-2">
                                                         📱 Número de teléfono
@@ -470,12 +416,11 @@ function Cart() {
                                                         placeholder="Ej: 8765-4321"
                                                         value={telefonoCliente}
                                                         onChange={(e) => setTelefonoCliente(e.target.value)}
-                                                        className="w-full border-2 border-pink-300 rounded-xl p-3 outline-none focus:border-pink-500 transition"
+                                                        className="w-full border-2 border-pink-300 bg-white rounded-xl p-3 outline-none focus:border-pink-500 transition"
                                                     />
                                                 </div>
 
                                                 <div className="grid md:grid-cols-2 gap-4">
-
                                                     <div>
                                                         <label className="block font-semibold text-gray-700 mb-2">
                                                             🗺️ Provincia
@@ -483,13 +428,11 @@ function Cart() {
                                                         <select
                                                             value={provincia}
                                                             onChange={(e) => setProvincia(e.target.value)}
-                                                            className="w-full border-2 border-pink-300 rounded-xl p-3 outline-none focus:border-pink-500 transition"
+                                                            className="w-full border-2 border-pink-300 bg-white rounded-xl p-3 outline-none focus:border-pink-500 transition cursor-pointer"
                                                         >
                                                             <option value="">Selecciona una provincia</option>
                                                             {provincias.map((prov) => (
-                                                                <option key={prov} value={prov}>
-                                                                    {prov}
-                                                                </option>
+                                                                <option key={prov} value={prov}>{prov}</option>
                                                             ))}
                                                         </select>
                                                     </div>
@@ -503,10 +446,9 @@ function Cart() {
                                                             placeholder="Ej: San José"
                                                             value={canton}
                                                             onChange={(e) => setCanton(e.target.value)}
-                                                            className="w-full border-2 border-pink-300 rounded-xl p-3 outline-none focus:border-pink-500 transition"
+                                                            className="w-full border-2 border-pink-300 bg-white rounded-xl p-3 outline-none focus:border-pink-500 transition"
                                                         />
                                                     </div>
-
                                                 </div>
 
                                                 <div>
@@ -518,7 +460,7 @@ function Cart() {
                                                         placeholder="Ej: Carmen"
                                                         value={distrito}
                                                         onChange={(e) => setDistrito(e.target.value)}
-                                                        className="w-full border-2 border-pink-300 rounded-xl p-3 outline-none focus:border-pink-500 transition"
+                                                        className="w-full border-2 border-pink-300 bg-white rounded-xl p-3 outline-none focus:border-pink-500 transition"
                                                     />
                                                 </div>
 
@@ -530,42 +472,36 @@ function Cart() {
                                                         placeholder="Ej: Calle Principal, Casa #123, frente a la iglesia..."
                                                         value={direccionExacta}
                                                         onChange={(e) => setDireccionExacta(e.target.value)}
-                                                        className="w-full h-24 border-2 border-pink-300 rounded-xl p-3 outline-none focus:border-pink-500 transition resize-none"
+                                                        className="w-full h-24 border-2 border-pink-300 bg-white rounded-xl p-3 outline-none focus:border-pink-500 transition resize-none"
                                                     />
                                                 </div>
-
                                             </div>
                                         )}
-
                                     </div>
-
                                 </div>
 
-                                {/* INFORMACIÓN IMPORTANTE */}
+                                {/* Información de SINPE Móvil */}
                                 <div className="bg-gradient-to-r from-pink-50 to-pink-100 border-2 border-pink-300 rounded-2xl p-6">
-
                                     <h3 className="text-lg font-bold text-pink-600 mb-3">
                                         💳 Información de pago
                                     </h3>
-
                                     <ul className="text-gray-700 space-y-2 text-sm md:text-base">
                                         <li>✅ Se requiere un adelanto del <strong>50% por SINPE Móvil</strong></li>
                                         <li>✅ El saldo se cancela <strong>al momento de la entrega</strong></li>
-                                        <li>✅ SINPE Móvil: <strong>6862 8115 650</strong></li>
+                                        <li>✅ SINPE Móvil: <strong>88115650</strong> a nombre de Francela Elizondo</li>
                                         <li>✅ Tiempo de entrega: <strong>3 a 7 días hábiles</strong></li>
                                     </ul>
-
                                 </div>
 
                                 {/* BOTÓN REALIZAR PEDIDO */}
                                 <button
-                                    onClick={generarPDFYEnviar}
+                                    type="submit" // Indica que este botón somete el formulario activando onSubmit
                                     disabled={generandoPDF}
                                     className={`w-full py-5 rounded-2xl text-xl font-bold shadow-lg transition transform flex items-center justify-center gap-3 ${
                                         generandoPDF
                                             ? 'bg-gray-400 cursor-not-allowed'
-                                            : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:scale-105'
-                                    } text-white`}
+                                            : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-xl hover:scale-103 active:scale-95'
+                                    } text-white cursor-pointer`}
                                 >
                                     {generandoPDF ? (
                                         <>
@@ -578,13 +514,10 @@ function Cart() {
                                         </>
                                     )}
                                 </button>
-
-                            </div>
-
+                            </form>
                         </div>
 
                     </div>
-
                 )}
 
             </div>

@@ -1,8 +1,17 @@
 /**
- * generatePDF.js - Utilidad para generar PDFs de pedidos
- * ========================================================
- * Función para generar un PDF con el resumen completo del pedido
- * incluyendo imágenes de productos, colores y datos del cliente.
+ * RESPONSABILIDAD DE LA CARPETA (src/utils):
+ * =========================================
+ * Esta carpeta contiene funciones de utilidad pura y ayudantes independientes.
+ * Son funciones reutilizables que realizan tareas auxiliares de procesamiento,
+ * formateo, cálculos matemáticos o integraciones de APIs puras del navegador
+ * (como manipulación directa de DOM para imprimir o generar archivos PDF), 
+ * desacopladas de React y sin dependencias directas del estado de componentes.
+ * 
+ * Temas demostrados:
+ * - ESM Modules (export, import)
+ * - Funciones reutilizables
+ * - Asincronía y Promesas (async/await)
+ * - JavaScript Moderno (const, let, template literals, reduce)
  */
 
 import html2canvas from 'html2canvas'

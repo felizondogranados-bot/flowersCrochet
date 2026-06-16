@@ -1,21 +1,10 @@
 /**
- * App.jsx - Componente Principal
- * ==============================
- * Punto de entrada de la aplicación.
- * Configura:
- * - Providers de contexto (CartContext, FavoritesContext)
- * - Router para navegación entre páginas
- * - Estructura de rutas de la aplicación
- * 
- * RUTAS DISPONIBLES:
- * - / (Home)
- * - /catalogo (Catálogo de productos)
- * - /carrito (Carrito de compras)
- * - /favoritos (Productos favoritos)
- * - /producto/:id (Detalle de producto)
- * 
- * @component
- * @returns {JSX.Element} Aplicación completa con Router y Providers
+ * Temas demostrados en este archivo:
+ * ===================================
+ * - React: JSX, Componentes
+ * - React Router: BrowserRouter, Routes, Route
+ * - Context Providers: CartProvider, FavoritesProvider (Composición de componentes)
+ * - Módulos ESM: import, export default
  */
 
 import {
@@ -24,15 +13,15 @@ import {
   Route
 } from "react-router-dom"
 
-// Providers de contexto
+// Providers de contexto (Estados globales compartidos)
 import CartProvider from "./context/CartContext"
 import FavoritesProvider from "./context/FavoritesContext"
 
-// Componentes principales
+// Componentes principales de la UI
 import Navbar from "./components/Navbar"
 import ScrollToTop from "./components/ScrollToTop"
 
-// Páginas
+// Páginas correspondientes a las diferentes rutas
 import Home from "./pages/Home"
 import Catalogo from "./pages/Catalogo"
 import Carrito from "./pages/Carrito"
@@ -40,71 +29,47 @@ import Favoritos from "./pages/Favoritos"
 import ProductDetail from "./pages/ProductDetail"
 
 /**
+ * RESPONSABILIDAD DE LA CARPETA (src/):
+ * =====================================
+ * Carpeta raíz de código fuente de la aplicación. Contiene el punto de entrada
+ * (main.jsx), el componente principal (App.jsx) que estructura la navegación y
+ * las configuraciones de estilos globales.
+ */
+
+/**
  * Componente App
- * Estructura principal de la aplicación con routing
+ * Configura los proveedores de contexto global, define el enrutador y las rutas asociadas.
  */
 function App() {
 
   return (
-
-    /* Provider de carrito - Proporciona contexto a todos los componentes */
+    /* [JS Avanzado: Composición de Componentes] Anidación limpia de proveedores para inyectar estados globales */
     <CartProvider>
-
-      {/* Provider de favoritos - Proporciona contexto de productos favoritos */}
       <FavoritesProvider>
 
-        {/* Router - Habilita navegación entre páginas */}
+        {/* [React Router] Habilita la navegación SPA usando HTML5 History API */}
         <BrowserRouter basename="/flowersCrochet/">
 
-          {/* Navbar - Navegación principal */}
+          {/* Barra de Navegación común */}
           <Navbar />
 
-          {/* ScrollToTop - Scroll automático al cambiar de ruta */}
+          {/* Resetea la posición del scroll a 0 al cambiar de ruta */}
           <ScrollToTop />
 
-          {/* Rutas de la aplicación */}
+          {/* Enrutador central con renderizado condicional según la ruta activa */}
           <Routes>
-
-            {/* Página de inicio */}
-            <Route
-              path="/"
-              element={<Home />}
-            />
-
-            {/* Catálogo de productos */}
-            <Route
-              path="/catalogo"
-              element={<Catalogo />}
-            />
-
-            {/* Carrito de compras */}
-            <Route
-              path="/carrito"
-              element={<Carrito />}
-            />
-
-            {/* Productos favoritos */}
-            <Route
-              path="/favoritos"
-              element={<Favoritos />}
-            />
-
-            {/* Detalle de un producto específico */}
-            <Route
-              path="/producto/:id"
-              element={<ProductDetail />}
-            />
-
+            <Route path="/" element={<Home />} />
+            <Route path="/catalogo" element={<Catalogo />} />
+            <Route path="/carrito" element={<Carrito />} />
+            <Route path="/favoritos" element={<Favoritos />} />
+            <Route path="/producto/:id" element={<ProductDetail />} />
           </Routes>
 
         </BrowserRouter>
 
       </FavoritesProvider>
-
     </CartProvider>
-
   )
-
 }
 
 export default App

@@ -1,19 +1,22 @@
 @import "tailwindcss";
+
+/**
+ * RESPONSABILIDAD DE LA CARPETA (src/):
+ * =====================================
+ * Estilos globales y configuraciones fundamentales de la aplicación.
+ * Este archivo centraliza el cargado de Tailwind CSS, define variables globales 
+ * de diseño para temas y aplica transiciones fluidas de comportamiento visual.
+ */
+
 :root {
-
   --pink-main: #fff5f8;
-
   --pink-navbar: rgba(255, 245, 248, 0.90);
-
   --pink-border: #f9c5d5;
-
   --pink-button: #ec4899;
-
   --pink-button-hover: #db2777;
-
   --pink-text: #1e293b;
-
 }
+
 html {
   scroll-behavior: smooth;
 }
@@ -22,9 +25,27 @@ body {
   margin: 0;
   padding: 0;
   background-color: #fdf2f8;
+  color: #1e293b;
   font-family: sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 * {
   box-sizing: border-box;
+}
+
+/* Animaciones personalizadas suaves para componentes */
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: .8;
+    transform: scale(1.02);
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s infinite ease-in-out;
 }
