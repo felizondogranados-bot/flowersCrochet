@@ -265,6 +265,39 @@ function Cart() {
                                                         </div>
                                                     )}
 
+                                                    {item.esPersonalizado && item.personalizacion && (
+                                                        <div className="text-xs text-gray-500 mt-1 space-y-0.5 border-l-2 border-pink-200 pl-2">
+                                                            {item.personalizacion.categoria === "ramo" && (
+                                                                <>
+                                                                    <p>💐 <strong>Flor:</strong> {item.personalizacion.tipoFlor}</p>
+                                                                    <p>🎨 <strong>Colores:</strong> {item.personalizacion.colores}</p>
+                                                                    <p>🎀 <strong>Envoltura:</strong> {item.personalizacion.conEnvoltura ? "Sí" : "No"}</p>
+                                                                    {item.personalizacion.detalles && <p>✍️ <strong>Detalles:</strong> {item.personalizacion.detalles}</p>}
+                                                                </>
+                                                            )}
+                                                            {item.personalizacion.categoria === "amigurumi" && (
+                                                                <>
+                                                                    <p>🧸 <strong>Tamaño:</strong> {item.personalizacion.tamano === "pequeno" ? "Pequeño (10 cm)" : item.personalizacion.tamano === "mediano" ? "Mediano (14 cm)" : "Grande (20 cm)"}</p>
+                                                                    <p>🎨 <strong>Colores:</strong> {item.personalizacion.colores}</p>
+                                                                    {item.personalizacion.accesorios?.length > 0 && (
+                                                                        <p>🎒 <strong>Accesorios:</strong> {item.personalizacion.accesorios.join(", ")}</p>
+                                                                    )}
+                                                                    <p>✍️ <strong>Detalles:</strong> {item.personalizacion.descripcion}</p>
+                                                                </>
+                                                            )}
+                                                            {item.personalizacion.categoria === "llavero" && (
+                                                                <>
+                                                                    <p>🔑 <strong>Colores:</strong> {item.personalizacion.colores}</p>
+                                                                    <p>🏷️ <strong>Nombre tejido:</strong> {item.personalizacion.tieneNombreTejido ? "Sí" : "No"}</p>
+                                                                    {item.personalizacion.extras?.length > 0 && (
+                                                                        <p>✨ <strong>Extras:</strong> {item.personalizacion.extras.join(", ")}</p>
+                                                                    )}
+                                                                    <p>✍️ <strong>Detalles:</strong> {item.personalizacion.descripcion}</p>
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    )}
+
                                                     <p className="font-bold text-pink-500 text-sm mt-1">
                                                         Subtotal: ₡{(item.precio * item.cantidad).toLocaleString()}
                                                     </p>

@@ -23,6 +23,24 @@ import { jsPDF } from 'jspdf'
  * @param {Object} datos - Datos del cliente
  * @param {number} total - Total del pedido
  */
+const waitImagesLoad = (parent) => {
+    const images = Array.from(parent.getElementsByTagName('img'))
+    const promises = images.map((img) => {
+        if (img.complete) return Promise.resolve()
+        return new Promise((resolve) => {
+            img.onload = resolve
+            img.onerror = resolve
+        })
+    })
+    return Promise.all(promises)
+}
+
+/**
+ * Genera un PDF con el resumen del pedido
+ * @param {Array} cart - Array de productos en el carrito
+ * @param {Object} datos - Datos del cliente
+ * @param {number} total - Total del pedido
+ */
 export const generarPDFPedido = async (cart, datos, total) => {
     try {
         // Crear elemento HTML invisible para capturar
@@ -63,11 +81,36 @@ export const generarPDFPedido = async (cart, datos, total) => {
             const subtotal = item.precio * item.cantidad
             const coloresInfo = []
             
-            if (item.colorFlor) {
-                coloresInfo.push(`🌸 ${item.colorFlor.nombre}`)
-            }
-            if (item.colorDecoracion) {
-                coloresInfo.push(`🎀 ${item.colorDecoracion.nombre}`)
+            if (item.esPersonalizado && item.personalizacion) {
+                const p = item.personalizacion;
+                if (p.categoria === "ramo") {
+                    coloresInfo.push(`Flor: ${p.tipoFlor === "Otro" ? p.otroTipo : p.tipoFlor}`);
+                    coloresInfo.push(`Colores: ${p.colores}`);
+                    coloresInfo.push(`Envoltura: ${p.conEnvoltura ? "Sí" : "No"}`);
+                    if (p.detalles) coloresInfo.push(`Detalles: ${p.detalles}`);
+                } else if (p.categoria === "amigurumi") {
+                    const sizeLabelMap = { pequeno: "Pequeño (10 cm)", mediano: "Mediano (14 cm)", grande: "Grande (20 cm)" };
+                    coloresInfo.push(`Tamaño: ${sizeLabelMap[p.tamano] || "Pequeño"}`);
+                    coloresInfo.push(`Colores: ${p.colores}`);
+                    if (p.accesorios && p.accesorios.length > 0) {
+                        coloresInfo.push(`Accesorios: ${p.accesorios.join(", ")}`);
+                    }
+                    coloresInfo.push(`Descripción: ${p.descripcion}`);
+                } else if (p.categoria === "llavero") {
+                    coloresInfo.push(`Colores: ${p.colores}`);
+                    coloresInfo.push(`Nombre tejido: ${p.tieneNombreTejido ? "Sí" : "No"}`);
+                    if (p.extras && p.extras.length > 0) {
+                        coloresInfo.push(`Extras: ${p.extras.join(", ")}`);
+                    }
+                    coloresInfo.push(`Descripción: ${p.descripcion}`);
+                }
+            } else {
+                if (item.colorFlor) {
+                    coloresInfo.push(`🌸 ${item.colorFlor.nombre}`)
+                }
+                if (item.colorDecoracion) {
+                    coloresInfo.push(`🎀 ${item.colorDecoracion.nombre}`)
+                }
             }
 
             htmlContent += `
@@ -77,7 +120,7 @@ export const generarPDFPedido = async (cart, datos, total) => {
                     </td>
                     <td style="padding: 15px; color: #333;">
                         <strong>${item.nombre}</strong>
-                        ${coloresInfo.length > 0 ? `<br><small style="color: #999; font-size: 11px;">${coloresInfo.join(', ')}</small>` : ''}
+                        ${coloresInfo.length > 0 ? `<br><small style="color: #999; font-size: 11px; line-height: 1.3;">${coloresInfo.join('<br>')}</small>` : ''}
                     </td>
                     <td style="padding: 15px; text-align: center; color: #333;">${item.cantidad}</td>
                     <td style="padding: 15px; text-align: right; color: #333;">₡${item.precio.toLocaleString()}</td>
@@ -162,11 +205,16 @@ export const generarPDFPedido = async (cart, datos, total) => {
         elemento.innerHTML = htmlContent
         document.body.appendChild(elemento)
 
+        // Esperar a que carguen todas las imágenes antes de capturar el canvas
+        await waitImagesLoad(elemento)
+
         // Capturar el contenido como canvas
         const canvas = await html2canvas(elemento, {
             backgroundColor: '#ffffff',
             scale: 2,
             logging: false,
+            useCORS: true,
+            allowTaint: true
         })
 
         // Crear PDF

@@ -70,6 +70,15 @@ function Navbar() {
                     </li>
 
                     <li>
+                        <Link
+                            to="/disena-pedido"
+                            className="hover:text-pink-400 transition"
+                        >
+                            Diseña tu Pedido ✨
+                        </Link>
+                    </li>
+
+                    <li>
                         <button
                             // [DOM/Eventos: onClick] Manejador de evento que redirige a inicio y hace scroll suave a la sección información
                             onClick={() => {
@@ -168,6 +177,16 @@ function Navbar() {
                                 className="hover:text-pink-400 transition block"
                             >
                                 Catálogo
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link
+                                to="/disena-pedido"
+                                onClick={() => setMenuAbierto(false)}
+                                className="hover:text-pink-400 transition block font-semibold text-pink-500"
+                            >
+                                Diseña tu Pedido ✨
                             </Link>
                         </li>
 

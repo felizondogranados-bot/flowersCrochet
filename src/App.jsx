@@ -27,6 +27,7 @@ import Catalogo from "./pages/Catalogo"
 import Carrito from "./pages/Carrito"
 import Favoritos from "./pages/Favoritos"
 import ProductDetail from "./pages/ProductDetail"
+import DisenaPedido from "./pages/DisenaPedido"
 
 /**
  * RESPONSABILIDAD DE LA CARPETA (src/):
@@ -63,6 +64,7 @@ function App() {
             <Route path="/carrito" element={<Carrito />} />
             <Route path="/favoritos" element={<Favoritos />} />
             <Route path="/producto/:id" element={<ProductDetail />} />
+            <Route path="/disena-pedido" element={<DisenaPedido />} />
           </Routes>
 
         </BrowserRouter>
