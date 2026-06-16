@@ -1,0 +1,216 @@
+[
+  {
+    "id": 1,
+    "nombre": "Rosas",
+    "precio": 3000,
+    "categoria": "Flores",
+    "descripcion": "Hermosas rosas tejidas a crochet ideales para regalos especiales 🌸",
+    "colores": [
+      "#f3121b",
+      "#fc1553",
+      "#f38093",
+      "#fe3a72",
+      "#ffc3d2"
+    ],
+    "personalizable": true,
+    "subirImagen": false,
+    "imagen": "/flowersCrochet/products/Rosas.jpg"
+  },
+  {
+    "id": 40,
+    "nombre": "Amigurumi Personalizado",
+    "precio": 20000,
+    "categoria": "Amigurumis",
+    "descripcion": "Creamos personajes personalizados totalmente a tu gusto ✨",
+    "colores": [
+      "Personalizado"
+    ],
+    "personalizable": true,
+    "subirImagen": true,
+    "imagen": "/flowersCrochet/products/amigurumi.jpg"
+  },
+  {
+    "id": 2,
+    "nombre": "Girasol",
+    "precio": 3000,
+    "categoria": "Flores",
+    "descripcion": "Hermoso girasol tejido a crochet, un rayo de sol que dura para siempre 🌻",
+    "imagen": "/flowersCrochet/products/Girasol.jpg"
+  },
+  {
+    "id": 3,
+    "nombre": "Calas",
+    "precio": 3000,
+    "categoria": "Flores",
+    "descripcion": "Elegantes calas tejidas a crochet, perfectas para decoración o regalo 🤍",
+    "imagen": "/flowersCrochet/products/Calas.jpg"
+  },
+  {
+    "id": 4,
+    "nombre": "Lirios",
+    "precio": 5000,
+    "categoria": "Flores",
+    "descripcion": "Detallados lirios en crochet que destacan en cualquier espacio 🌸",
+    "imagen": "/flowersCrochet/products/Lirios.jpg"
+  },
+  {
+    "id": 5,
+    "nombre": "Claveles",
+    "precio": 4000,
+    "categoria": "Flores",
+    "descripcion": "Claveles clásicos y coloridos tejidos a mano con gran dedicación 💖",
+    "imagen": "/flowersCrochet/products/Claveles.jpg"
+  },
+  {
+    "id": 6,
+    "nombre": "Margaritas",
+    "precio": 3000,
+    "categoria": "Flores",
+    "descripcion": "Sencillas y bellas margaritas de crochet para alegrar tu día 🌼",
+    "imagen": "/flowersCrochet/products/Margaritas.jpg"
+  },
+  {
+    "id": 7,
+    "nombre": "Tulipan #1",
+    "precio": 3000,
+    "categoria": "Flores",
+    "descripcion": "Tulipán simple tejido a crochet en colores vibrantes 🌷",
+    "imagen": "/flowersCrochet/products/Tulipan1.jpg"
+  },
+  {
+    "id": 8,
+    "nombre": "Tulipan #2",
+    "precio": 3500,
+    "categoria": "Flores",
+    "descripcion": "Tulipán con detalles especiales, tejido con amor 🌷",
+    "imagen": "/flowersCrochet/products/Tulipan2.jpg"
+  },
+  {
+    "id": 9,
+    "nombre": "Lavanda",
+    "precio": 2500,
+    "categoria": "Flores",
+    "descripcion": "Elegante ramita de lavanda tejida en crochet para aromatizar visualmente tu hogar 💜",
+    "imagen": "/flowersCrochet/products/Lavanda.jpg"
+  },
+  {
+    "id": 10,
+    "nombre": "Flor Rapunzel",
+    "precio": 5000,
+    "categoria": "Flores",
+    "descripcion": "Flor mágica inspirada en Rapunzel, tejida con detalles brillantes ✨",
+    "imagen": "/flowersCrochet/products/FlorRapunzel.jpg"
+  },
+  {
+    "id": 11,
+    "nombre": "Flor Rapunzel y Pascal",
+    "precio": 13000,
+    "categoria": "Flores",
+    "descripcion": "Hermoso combo de la flor mágica de Rapunzel acompañada por el tierno Pascal a crochet 🦎🌸",
+    "imagen": "/flowersCrochet/products/FlorRapunzellPascal.jpg"
+  },
+  {
+    "id": 12,
+    "nombre": "Guaria",
+    "precio": 4000,
+    "categoria": "Flores",
+    "descripcion": "Guaria morada tejida a crochet, la flor nacional de Costa Rica en tus manos 🇨🇷💜",
+    "imagen": "/flowersCrochet/products/Guaria.jpg"
+  },
+  {
+    "id": 13,
+    "nombre": "Tulipan Amor",
+    "precio": 4000,
+    "categoria": "Flores",
+    "descripcion": "Tulipán especial decorado con detalles románticos ❤️",
+    "imagen": "/flowersCrochet/products/TulipanAmor.jpg"
+  },
+  {
+    "id": 14,
+    "nombre": "Tulipan Corazon",
+    "precio": 4000,
+    "categoria": "Flores",
+    "descripcion": "Tulipán que brota de un tierno corazón tejido, perfecto para regalar 💖",
+    "imagen": "/flowersCrochet/products/TulipanCorazon.jpg"
+  },
+  {
+    "id": 15,
+    "nombre": "Rosa Combinada",
+    "precio": 4000,
+    "categoria": "Flores",
+    "descripcion": "Rosa tejida combinando colores complementarios con pétalos delicados 🌹",
+    "imagen": "/flowersCrochet/products/RosaCombinada.jpg"
+  },
+  {
+    "id": 16,
+    "nombre": "Corazon",
+    "precio": 3000,
+    "categoria": "Flores",
+    "descripcion": "Tierno corazón tejido en crochet, el detalle perfecto para recordar cuánto quieres a alguien 💕",
+    "imagen": "/flowersCrochet/products/Corazon.jpg"
+  },
+  {
+    "id": 17,
+    "nombre": "Flor Corazon",
+    "precio": 8000,
+    "categoria": "Flores",
+    "descripcion": "Hermosa flor con diseño de corazón que resalta por su originalidad 🌸❤️",
+    "imagen": "/flowersCrochet/products/FlorCorazon.jpg"
+  },
+  {
+    "id": 18,
+    "nombre": "Tulipan Gigante",
+    "precio": 20000,
+    "categoria": "Flores",
+    "descripcion": "Tulipán de gran escala tejido en crochet, una pieza de decoración imponente y espectacular 🌷✨",
+    "imagen": "/flowersCrochet/products/TulipanGrande.jpg"
+  },
+  {
+    "id": 19,
+    "nombre": "Ramo Araña",
+    "precio": 10000,
+    "categoria": "Ramos",
+    "descripcion": "Ramo temático de Spiderman, ideal para fans del arácnido 🕷️❤️",
+    "imagen": "/flowersCrochet/products/RamoAraña.jpg"
+  },
+  {
+    "id": 20,
+    "nombre": "El Ramo de la Noche",
+    "precio": 10000,
+    "categoria": "Ramos",
+    "descripcion": "Ramo en tonalidades oscuras y místicas, combinando elegancia y misterio 🖤🌸",
+    "imagen": "/flowersCrochet/products/GuariaElRamodelaNoche.jpg"
+  },
+  {
+    "id": 21,
+    "nombre": "Ramo Abejita",
+    "precio": 9500,
+    "categoria": "Ramos",
+    "descripcion": "Ramo decorado con una tierna abejita tejida en crochet, súper dulce 🐝💛",
+    "imagen": "/flowersCrochet/products/Guaria.jpg"
+  },
+  {
+    "id": 22,
+    "nombre": "Ramo Chanchito",
+    "precio": 9000,
+    "categoria": "Ramos",
+    "descripcion": "Simpático ramo con temática de cerdito rosa tejido a crochet 🐷💖",
+    "imagen": "/flowersCrochet/products/RamoChanchito.jpg"
+  },
+  {
+    "id": 23,
+    "nombre": "Ramo Amor Eterno",
+    "precio": 14000,
+    "categoria": "Ramos",
+    "descripcion": "El ramo definitivo de rosas y flores variadas que durará por siempre, expresando amor eterno 🌹💍",
+    "imagen": "/flowersCrochet/products/RamoAmorEterno.jpg"
+  },
+  {
+    "id": 24,
+    "nombre": "Ramo Alegria en Flor",
+    "precio": 8500,
+    "categoria": "Ramos",
+    "descripcion": "Combinación alegre de margaritas y tulipanes tejidos en crochet para iluminar cualquier rostro 😊💐",
+    "imagen": "/flowersCrochet/products/RamoAlegria.jpg"
+  }
+]
